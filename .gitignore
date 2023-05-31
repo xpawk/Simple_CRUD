@@ -1,0 +1,13 @@
+# .gitignore
+
+# Ignore environment related files
+.env
+
+# Ignore Node modules
+node_modules/
+
+# Ignore Prettier configuration
+._prettier.json
+
+# Ignore Visual Studio Code settings
+.vscode/

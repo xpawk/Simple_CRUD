@@ -1,18 +1,18 @@
-import { ApiOperations } from "../apiOperations.js";
+import { ApiOperations } from '../apiOperations.js';
 export default class Home {
-  constructor() {
-    document.title = "Users Table";
-    return this.usersList();
-  }
-  async usersList() {
-    this.users = await ApiOperations.getUsers();
-    return this;
-  }
+    constructor() {
+        document.title = 'Users Table';
+        return this.usersList();
+    }
+    async usersList() {
+        this.users = await ApiOperations.getUsers();
+        return this;
+    }
 
-  tableUsers() {
-    let usersPrint = "";
-    this.users.forEach((user) => {
-      usersPrint += `
+    tableUsers() {
+        let usersPrint = '';
+        this.users.forEach((user) => {
+            usersPrint += `
     <tr data-id=${user._id}>
     <td>${user.name}</td>
     <td>${user.lName}</td>
@@ -23,8 +23,8 @@ export default class Home {
     <button class="edit" data-id="${user._id}">Edit</button></td>
     </tr>
     `;
-    });
-    return `
+        });
+        return `
     
         <table id='users-list'>
         <thead>
@@ -41,9 +41,9 @@ export default class Home {
       ${usersPrint}
         </tbody>
       </table>`;
-  }
-  formUsers() {
-    return `<h2 id='users_title'>Input Data About New Users</h2>
+    }
+    formUsers() {
+        return `<h2 id='users_title'>Input Data About New Users</h2>
     <form id="user-form">
       <fieldset>
       <div>
@@ -70,9 +70,9 @@ export default class Home {
       </fieldset>
     </form>
     `;
-  }
-  dbSelect() {
-    return `<div class='env'>
+    }
+    dbSelect() {
+        return `<div class='env'>
     <select id="environment-select" name="environment">
     <option disabled selected value=''>select an option</option>
     <option value="prod">Prod</option>
@@ -81,9 +81,9 @@ export default class Home {
   <button type='button' class="update_env_button">Update</button>
   </div>
     `;
-  }
-  modal() {
-    return `
+    }
+    modal() {
+        return `
     <div class="modal_control">
   <div class="modal_control_bg "></div>
   <div class="modal_content">
@@ -93,10 +93,10 @@ export default class Home {
   </div>
   </div>
     `;
-  }
+    }
 
-  getHtml() {
-    return `
+    getHtml() {
+        return `
       <header>
       <h1 class="title">Users List</h1>
       ${this.dbSelect()}   
@@ -108,5 +108,5 @@ ${this.tableUsers()}
 ${this.formUsers()}  
   </div>
     `;
-  }
+    }
 }
