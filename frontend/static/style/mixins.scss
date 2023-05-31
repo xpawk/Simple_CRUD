@@ -1,0 +1,15 @@
+@mixin button {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition-duration: 500ms;
+    &:hover {
+        transform: translate(0, -5px);
+        transition-duration: 500ms;
+        color: black;
+    }
+}

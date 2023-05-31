@@ -1,0 +1,7 @@
+@import './mixins.scss';
+@import 'features/modal.scss';
+@import 'subPages/adminPanel.scss';
+@import 'subPages/home.scss';
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
