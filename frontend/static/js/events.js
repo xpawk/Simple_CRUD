@@ -1,5 +1,5 @@
 import { ApiOperations } from './apiOperations.js';
-import Home from './subpages/home.js';
+import AdminPanel from './subPages/adminPanel.js';
 
 class Events {
     static async variables() {
@@ -134,9 +134,9 @@ class Events {
                     this.envSelect.value,
                 );
                 if (response === 'Success') {
-                    const view = await new Home();
+                    const panel = await new AdminPanel;
                     const table = document.getElementById('users-list');
-                    table.innerHTML = await view.tableUsers();
+                    table.innerHTML = await panel.tableUsers();
                     this.users = await ApiOperations.getUsers();
                     this.clearForm();
                     this.updateTablebtn('add');
