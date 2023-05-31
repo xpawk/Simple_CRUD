@@ -46,7 +46,7 @@ class ApiOperations {
         }
     }
 
-    static async updateApi(env) {
+    static async switchEnv(env) {
         try {
             const response = await fetch('/env', {
                 method: 'POST',
@@ -54,6 +54,19 @@ class ApiOperations {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ env }),
+            });
+            return response.json();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    static async checkEnv() {
+        try {
+            const response = await fetch('/checkEnv', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
             return response.json();
         } catch (err) {

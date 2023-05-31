@@ -129,12 +129,12 @@ class Events {
 
     static async changeEnv() {
         try {
-            if (this.envSelect.value != '') {
-                const response = await ApiOperations.updateApi(
+            if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
+                const response = await ApiOperations.switchEnv(
                     this.envSelect.value,
                 );
                 if (response === 'Success') {
-                    const panel = await new AdminPanel;
+                    const panel = await new AdminPanel();
                     const table = document.getElementById('users-list');
                     table.innerHTML = await panel.tableUsers();
                     this.users = await ApiOperations.getUsers();

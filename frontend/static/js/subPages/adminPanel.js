@@ -1,14 +1,14 @@
 import { ApiOperations } from '../apiOperations.js';
-import { Events } from '../events.js';
 
 export default class AdminPanel {
     constructor() {
         document.title = 'Users Table';
-        return this.usersList();
+        return this.dbData();
     }
 
-    async usersList() {
+    async dbData() {
         this.users = await ApiOperations.getUsers();
+        this.dbName = await ApiOperations.checkEnv();
         return this;
     }
 
@@ -76,10 +76,13 @@ export default class AdminPanel {
     }
     dbSelect() {
         return `<div class='env'>
-    <select id="environment-select" name="environment">
-    <option disabled selected value=''>select an option</option>
-    <option value="prod">Prod</option>
-    <option value="preprod">Preprod</option>
+  <select id="environment-select" name="environment">
+        <option value="prod" ${
+            this.dbName === 'prod' ? 'selected' : ''
+        }>Prod</option>
+        <option value="preprod" ${
+            this.dbName === 'preprod' ? 'selected' : ''
+        }>Preprod</option>
   </select>
   <button type='button' class="update_env_button">Update</button>
   </div>

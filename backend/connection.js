@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const connectDB = async (currentEnv) => {
+const connectDB = async (currentEnv = 'preprod') => {
     try {
         const config = {
             prod: process.env.PROD_DB_URL,
@@ -11,7 +11,7 @@ const connectDB = async (currentEnv) => {
 
         const con = await mongoose.connect(config[currentEnv]);
         console.log(`MongoDB connected: ${con.connection.host}`);
-        return con;
+        return con.connection.db.databaseName;
     } catch (err) {
         console.log(err);
         process.exit(1);
