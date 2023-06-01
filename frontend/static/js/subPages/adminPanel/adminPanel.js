@@ -112,7 +112,7 @@ export default class AdminPanel {
         return `
         
       <header>
-      <h1 class="title"><a href='/'>Users List</a></h1>
+      <h1 class="title"><a href='/' route>Users List</a></h1>
       ${this.dbSelect()}   
       </header>
       ${this.modal()}

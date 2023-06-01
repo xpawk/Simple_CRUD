@@ -29,12 +29,12 @@ const router = async (path = '/') => {
 };
 
 const handleNavigation = (e) => {
-    if (e.target.matches('a')) {
+    if (e.target.matches('a') && e.target.hasAttribute('route')) {
         e.preventDefault();
-        const path = e.target.getAttribute('href');
-        history.pushState(null, '', path);
-        router(path);
     }
+    const path = e.target.getAttribute('href');
+    history.pushState(null, '', path);
+    router(path);
 };
 
 document.addEventListener('DOMContentLoaded', () => {

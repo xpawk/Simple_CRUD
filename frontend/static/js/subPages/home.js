@@ -5,7 +5,7 @@ export default class Home {
     getHtml() {
         return `
     <h1> Login Page </h1>
-    <a href='/adminPanel'>AdminPanel</a>
+    <a href='/adminPanel' route>AdminPanel</a>
     `;
     }
 }
