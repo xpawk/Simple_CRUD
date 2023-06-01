@@ -16,6 +16,7 @@ class Events {
                 updateUser: `Update data about `,
             };
             this.modal = document.querySelector('.modal_control');
+            this.loader = document.querySelector('.loader');
             this.handlers = {
                 edit: () => this.editHandler(),
                 delete: () => this.deleteHandler(),
@@ -66,6 +67,7 @@ class Events {
 
     static async addHandler() {
         try {
+            this.loaderHandler(true);
             let userData = this.dataFromForm();
             const response = await ApiOperations.addUser(userData);
             if (response === 'Success') {
@@ -77,6 +79,7 @@ class Events {
             } else {
                 this.createModal('Abort', response);
             }
+            this.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -84,6 +87,7 @@ class Events {
 
     static async deleteHandler() {
         try {
+            this.loaderHandler(true);
             const response = await ApiOperations.deleteUser(this.currentId);
             if (response === 'Success') {
                 this.deleteTableRow(this.currentId);
@@ -91,6 +95,7 @@ class Events {
             } else {
                 this.createModal('Abort', response);
             }
+            this.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -109,6 +114,7 @@ class Events {
 
     static async updateUser() {
         try {
+            this.loaderHandler(true);
             let userData = this.dataFromForm();
             const response = await ApiOperations.editUser(
                 userData,
@@ -122,6 +128,7 @@ class Events {
             } else {
                 this.createModal('Abort', response);
             }
+            this.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -130,6 +137,7 @@ class Events {
     static async changeEnv() {
         try {
             if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
+                this.loaderHandler(true);
                 const response = await ApiOperations.switchEnv(
                     this.envSelect.value,
                 );
@@ -144,6 +152,7 @@ class Events {
                         response,
                         'Enviroment changed successfully',
                     );
+                    this.loaderHandler();
                 } else {
                     this.createModal('Abort', response);
                 }
@@ -217,6 +226,13 @@ class Events {
     }
     static closeModal() {
         this.modal.classList.remove('open');
+    }
+    static loaderHandler(action) {
+        if (action) {
+            this.loader.style.display = 'block';
+        } else {
+            this.loader.style.display = 'none';
+        }
     }
 }
 export { Events };

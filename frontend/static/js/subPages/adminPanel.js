@@ -101,13 +101,22 @@ export default class AdminPanel {
     `;
     }
 
+    loader() {
+        return `<div class='loader'>
+      <div class='loader_content'></div>
+      <div class='loader_bg'></div>
+      </div>`;
+    }
+
     getHtml() {
         return `
+        
       <header>
       <h1 class="title"><a href='/'>Users List</a></h1>
       ${this.dbSelect()}   
       </header>
       ${this.modal()}
+      ${this.loader()}
     <div class='content'>
     <h2>Users Data</h2>
 ${this.tableUsers()}
