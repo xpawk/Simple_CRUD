@@ -1,4 +1,4 @@
-import { ApiOperations } from '../apiOperations.js';
+import { ApiOperations } from '../../apiOperations.js';
 
 export default class AdminPanel {
     constructor() {

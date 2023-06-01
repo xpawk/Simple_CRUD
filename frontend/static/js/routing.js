@@ -1,5 +1,5 @@
-import Events from './events.js';
-import AdminPanel from './subPages/adminPanel.js';
+import Events from './subPages/adminPanel/events.js';
+import AdminPanel from './subPages/adminPanel/adminPanel.js';
 import Home from './subPages/home.js';
 
 const router = async () => {

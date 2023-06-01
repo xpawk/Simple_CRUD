@@ -1,7 +1,7 @@
-import { ApiOperations } from './apiOperations.js';
+import { ApiOperations } from '../../apiOperations.js';
 import DomOperations from './domOperations.js';
-import AdminPanel from './subPages/adminPanel.js';
-
+import AdminPanel from './adminPanel.js';
+import Loader from '../../utils/Loader.js';
 export default class Events {
     constructor() {
         this.envSelect = document.getElementById('environment-select');
@@ -26,6 +26,7 @@ export default class Events {
     }
     async variables() {
         try {
+            this.loader = new Loader(document.querySelector('.loader'));
             this.domOp = await new DomOperations();
             this.users = await ApiOperations.getUsers();
             return this;
@@ -63,19 +64,22 @@ export default class Events {
 
     async addHandler() {
         try {
-            this.domOp.loaderHandler(true);
-            let userData = this.domOp.dataFromForm();
-            const response = await ApiOperations.addUser(userData);
-            if (response === 'Success') {
-                this.users = await ApiOperations.getUsers();
-                this.currentUser = this.users.slice(-1)[0];
-                this.domOp.clearForm();
-                this.domOp.updateTableRow(userData, await this.currentUser._id);
-                this.domOp.createModal(response, 'User successfully added');
-            } else {
-                this.domOp.createModal('Abort', response);
-            }
-            this.domOp.loaderHandler();
+            await this.loader.withLoader(async () => {
+                let userData = this.domOp.dataFromForm();
+                const response = await ApiOperations.addUser(userData);
+                if (response === 'Success') {
+                    this.users = await ApiOperations.getUsers();
+                    this.currentUser = this.users.slice(-1)[0];
+                    this.domOp.clearForm();
+                    this.domOp.updateTableRow(
+                        userData,
+                        await this.currentUser._id,
+                    );
+                    this.domOp.createModal(response, 'User successfully added');
+                } else {
+                    this.domOp.createModal('Abort', response);
+                }
+            });
         } catch (err) {
             console.log(err);
         }
@@ -83,15 +87,18 @@ export default class Events {
 
     async deleteHandler() {
         try {
-            this.domOp.loaderHandler(true);
-            const response = await ApiOperations.deleteUser(this.currentId);
-            if (response === 'Success') {
-                this.domOp.deleteTableRow(this.currentId);
-                this.domOp.createModal(response, 'User successfully deleted');
-            } else {
-                this.domOp.createModal('Abort', response);
-            }
-            this.domOp.loaderHandler();
+            await this.loader.withLoader(async () => {
+                const response = await ApiOperations.deleteUser(this.currentId);
+                if (response === 'Success') {
+                    this.domOp.deleteTableRow(this.currentId);
+                    this.domOp.createModal(
+                        response,
+                        'User successfully deleted',
+                    );
+                } else {
+                    this.domOp.createModal('Abort', response);
+                }
+            });
         } catch (err) {
             console.log(err);
         }
@@ -109,21 +116,24 @@ export default class Events {
 
     async updateUser() {
         try {
-            this.domOp.loaderHandler(true);
-            let userData = this.domOp.dataFromForm();
-            const response = await ApiOperations.editUser(
-                userData,
-                this.currentId,
-            );
-            if (response === 'Success') {
-                this.domOp.clearForm();
-                this.domOp.updateTableRow(userData, this.currentId);
-                this.domOp.updateTablebtn('add');
-                this.domOp.createModal(response, 'User successfully edited');
-            } else {
-                this.domOp.createModal('Abort', response);
-            }
-            this.domOp.loaderHandler();
+            await this.loader.withLoader(async () => {
+                let userData = this.domOp.dataFromForm();
+                const response = await ApiOperations.editUser(
+                    userData,
+                    this.currentId,
+                );
+                if (response === 'Success') {
+                    this.domOp.clearForm();
+                    this.domOp.updateTableRow(userData, this.currentId);
+                    this.domOp.updateTablebtn('add');
+                    this.domOp.createModal(
+                        response,
+                        'User successfully edited',
+                    );
+                } else {
+                    this.domOp.createModal('Abort', response);
+                }
+            });
         } catch (err) {
             console.log(err);
         }
@@ -132,25 +142,25 @@ export default class Events {
     async changeEnv() {
         try {
             if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
-                this.domOp.loaderHandler(true);
-                const response = await ApiOperations.switchEnv(
-                    this.envSelect.value,
-                );
-                if (response === 'Success') {
-                    const panel = await new AdminPanel();
-                    const table = document.getElementById('users-list');
-                    table.innerHTML = await panel.tableUsers();
-                    this.users = await ApiOperations.getUsers();
-                    this.domOp.clearForm();
-                    this.domOp.updateTablebtn('add');
-                    this.domOp.createModal(
-                        response,
-                        'Enviroment changed successfully',
+                await this.loader.withLoader(async () => {
+                    const response = await ApiOperations.switchEnv(
+                        this.envSelect.value,
                     );
-                    this.domOp.loaderHandler();
-                } else {
-                    this.domOp.createModal('Abort', response);
-                }
+                    if (response === 'Success') {
+                        const panel = await new AdminPanel();
+                        const table = document.getElementById('users-list');
+                        table.innerHTML = await panel.tableUsers();
+                        this.users = await ApiOperations.getUsers();
+                        this.domOp.clearForm();
+                        this.domOp.updateTablebtn('add');
+                        this.domOp.createModal(
+                            response,
+                            'Enviroment changed successfully',
+                        );
+                    } else {
+                        this.domOp.createModal('Abort', response);
+                    }
+                });
             }
         } catch (err) {
             console.log(err);
