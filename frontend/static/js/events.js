@@ -2,42 +2,46 @@ import { ApiOperations } from './apiOperations.js';
 import DomOperations from './domOperations.js';
 import AdminPanel from './subPages/adminPanel.js';
 
-class Events {
-    static async variables() {
+export default class Events {
+    constructor() {
+        this.envSelect = document.getElementById('environment-select');
+        this.button = document.querySelector('#user-form .submit_button');
+        this.handlers = {
+            edit: () => this.editHandler(),
+            delete: () => this.deleteHandler(),
+            submit_button: () => {
+                const submitType = this.button.type;
+                if (submitType === 'submit') {
+                    return this.addHandler();
+                } else if (submitType === 'button') {
+                    return this.updateUser();
+                }
+            },
+            update_env_button: () => this.changeEnv(),
+            modal_control_close: () => this.domOp.closeModal(),
+            modal_control_bg: () => this.domOp.closeModal(),
+        };
+        this.eventHandler();
+        return this.variables();
+    }
+    async variables() {
         try {
-            this.envSelect = document.getElementById('environment-select');
             this.domOp = await new DomOperations();
             this.users = await ApiOperations.getUsers();
-            this.button = document.querySelector('#user-form .submit_button');
-            this.handlers = {
-                edit: () => this.editHandler(),
-                delete: () => this.deleteHandler(),
-                submit_button: () => {
-                    const submitType = this.button.type;
-                    if (submitType === 'submit') {
-                        return this.addHandler();
-                    } else if (submitType === 'button') {
-                        return this.updateUser();
-                    }
-                },
-                update_env_button: () => this.changeEnv(),
-                modal_control_close: () => this.domOp.closeModal(),
-                modal_control_bg: () => this.domOp.closeModal(),
-            };
+            return this;
         } catch (err) {
             console.log(err);
         }
     }
 
-    static preventSubmit() {
+    preventSubmit() {
         document.querySelector('#user-form').addEventListener('submit', (e) => {
             e.preventDefault();
         });
     }
 
-    static async eventHandler() {
+    async eventHandler() {
         try {
-            this.variables();
             this.preventSubmit();
             document.body.addEventListener('click', (e) => {
                 const target = e.target;
@@ -57,9 +61,9 @@ class Events {
         }
     }
 
-    static async addHandler() {
+    async addHandler() {
         try {
-            this.loaderHandler(true);
+            this.domOp.loaderHandler(true);
             let userData = this.domOp.dataFromForm();
             const response = await ApiOperations.addUser(userData);
             if (response === 'Success') {
@@ -77,7 +81,7 @@ class Events {
         }
     }
 
-    static async deleteHandler() {
+    async deleteHandler() {
         try {
             this.domOp.loaderHandler(true);
             const response = await ApiOperations.deleteUser(this.currentId);
@@ -93,7 +97,7 @@ class Events {
         }
     }
 
-    static async editHandler() {
+    async editHandler() {
         try {
             this.domOp.setFormTitle(this.currentUser);
             this.domOp.updateTablebtn('update', this.currentId);
@@ -103,7 +107,7 @@ class Events {
         }
     }
 
-    static async updateUser() {
+    async updateUser() {
         try {
             this.domOp.loaderHandler(true);
             let userData = this.domOp.dataFromForm();
@@ -126,7 +130,7 @@ class Events {
         }
     }
 
-    static async changeEnv() {
+    async changeEnv() {
         try {
             if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
                 this.domOp.loaderHandler(true);

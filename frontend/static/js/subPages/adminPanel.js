@@ -78,10 +78,10 @@ export default class AdminPanel {
         return `<div class='env'>
   <select id="environment-select" name="environment">
         <option value="prod" ${
-            this.dbName === 'prod' ? 'selected disabled' : ''
+            this.dbName === 'prod' ? 'selected' : ' '
         }>Prod</option>
         <option value="preprod" ${
-            this.dbName === 'preprod' ? 'selected disabled' : ''
+            this.dbName === 'preprod' ? 'selected' : ' '
         }>Preprod</option>
   </select>
   <button type='button' class="update_env_button">Update</button>
