@@ -15,13 +15,10 @@ const router = async () => {
         routes.forEach(async (el) => {
             if (el.path === window.location.pathname) {
                 const view = await new el.view();
-
                 document.querySelector('#app').innerHTML = await view.getHtml();
-
-                for (let i = 0; i < el.additionalClasses.length; i++) {
-                    console.log(1);
-                    const util = await new el.additionalClasses[i]();
-                }
+                el.additionalClasses.forEach(async (classInstance) => {
+                    await new classInstance();
+                });
             }
         });
     } catch (error) {

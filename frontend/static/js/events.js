@@ -111,7 +111,6 @@ export default class Events {
         try {
             this.domOp.loaderHandler(true);
             let userData = this.domOp.dataFromForm();
-            console.log(this.currentId);
             const response = await ApiOperations.editUser(
                 userData,
                 this.currentId,
@@ -158,4 +157,3 @@ export default class Events {
         }
     }
 }
-export { Events };
