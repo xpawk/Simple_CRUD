@@ -1,22 +1,14 @@
 import { ApiOperations } from './apiOperations.js';
+import DomOperations from './domOperations.js';
 import AdminPanel from './subPages/adminPanel.js';
 
 class Events {
     static async variables() {
         try {
             this.envSelect = document.getElementById('environment-select');
+            this.domOp = await new DomOperations();
             this.users = await ApiOperations.getUsers();
-            this.inputFields = document.querySelectorAll(
-                '#user-form input[type="text"]',
-            );
-            this.formTitle = document.querySelector('#users_title');
             this.button = document.querySelector('#user-form .submit_button');
-            this.text = {
-                newUser: 'Input Data About New Users',
-                updateUser: `Update data about `,
-            };
-            this.modal = document.querySelector('.modal_control');
-            this.loader = document.querySelector('.loader');
             this.handlers = {
                 edit: () => this.editHandler(),
                 delete: () => this.deleteHandler(),
@@ -29,8 +21,8 @@ class Events {
                     }
                 },
                 update_env_button: () => this.changeEnv(),
-                modal_control_close: () => this.closeModal(),
-                modal_control_bg: () => this.closeModal(),
+                modal_control_close: () => this.domOp.closeModal(),
+                modal_control_bg: () => this.domOp.closeModal(),
             };
         } catch (err) {
             console.log(err);
@@ -68,18 +60,18 @@ class Events {
     static async addHandler() {
         try {
             this.loaderHandler(true);
-            let userData = this.dataFromForm();
+            let userData = this.domOp.dataFromForm();
             const response = await ApiOperations.addUser(userData);
             if (response === 'Success') {
                 this.users = await ApiOperations.getUsers();
                 this.currentUser = this.users.slice(-1)[0];
-                this.clearForm();
-                this.updateTableRow(userData, await this.currentUser._id);
-                this.createModal(response, 'User successfully added');
+                this.domOp.clearForm();
+                this.domOp.updateTableRow(userData, await this.currentUser._id);
+                this.domOp.createModal(response, 'User successfully added');
             } else {
-                this.createModal('Abort', response);
+                this.domOp.createModal('Abort', response);
             }
-            this.loaderHandler();
+            this.domOp.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -87,15 +79,15 @@ class Events {
 
     static async deleteHandler() {
         try {
-            this.loaderHandler(true);
+            this.domOp.loaderHandler(true);
             const response = await ApiOperations.deleteUser(this.currentId);
             if (response === 'Success') {
-                this.deleteTableRow(this.currentId);
-                this.createModal(response, 'User successfully deleted');
+                this.domOp.deleteTableRow(this.currentId);
+                this.domOp.createModal(response, 'User successfully deleted');
             } else {
-                this.createModal('Abort', response);
+                this.domOp.createModal('Abort', response);
             }
-            this.loaderHandler();
+            this.domOp.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -103,10 +95,9 @@ class Events {
 
     static async editHandler() {
         try {
-            this.formTitle.innerHTML =
-                this.text.updateUser + this.currentUser.name;
-            this.updateTablebtn('update');
-            this.userToForm(this.currentUser);
+            this.domOp.setFormTitle(this.currentUser);
+            this.domOp.updateTablebtn('update', this.currentId);
+            this.domOp.userToForm(this.currentUser);
         } catch (err) {
             console.log(err);
         }
@@ -114,21 +105,22 @@ class Events {
 
     static async updateUser() {
         try {
-            this.loaderHandler(true);
-            let userData = this.dataFromForm();
+            this.domOp.loaderHandler(true);
+            let userData = this.domOp.dataFromForm();
+            console.log(this.currentId);
             const response = await ApiOperations.editUser(
                 userData,
                 this.currentId,
             );
             if (response === 'Success') {
-                this.clearForm();
-                this.updateTableRow(userData, this.currentId);
-                this.updateTablebtn('add');
-                this.createModal(response, 'User successfully edited');
+                this.domOp.clearForm();
+                this.domOp.updateTableRow(userData, this.currentId);
+                this.domOp.updateTablebtn('add');
+                this.domOp.createModal(response, 'User successfully edited');
             } else {
-                this.createModal('Abort', response);
+                this.domOp.createModal('Abort', response);
             }
-            this.loaderHandler();
+            this.domOp.loaderHandler();
         } catch (err) {
             console.log(err);
         }
@@ -137,7 +129,7 @@ class Events {
     static async changeEnv() {
         try {
             if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
-                this.loaderHandler(true);
+                this.domOp.loaderHandler(true);
                 const response = await ApiOperations.switchEnv(
                     this.envSelect.value,
                 );
@@ -146,92 +138,19 @@ class Events {
                     const table = document.getElementById('users-list');
                     table.innerHTML = await panel.tableUsers();
                     this.users = await ApiOperations.getUsers();
-                    this.clearForm();
-                    this.updateTablebtn('add');
-                    this.createModal(
+                    this.domOp.clearForm();
+                    this.domOp.updateTablebtn('add');
+                    this.domOp.createModal(
                         response,
                         'Enviroment changed successfully',
                     );
-                    this.loaderHandler();
+                    this.domOp.loaderHandler();
                 } else {
-                    this.createModal('Abort', response);
+                    this.domOp.createModal('Abort', response);
                 }
             }
         } catch (err) {
             console.log(err);
-        }
-    }
-    static deleteTableRow(id) {
-        document.querySelector(`#users-list tr[data-id="${id}"]`).remove();
-        if (this.button.getAttribute('data-id') == id) {
-            this.clearForm();
-            this.updateTablebtn('add');
-        }
-    }
-
-    static updateTablebtn(type) {
-        if (type === 'add') {
-            this.button.value = 'Add';
-            this.button.type = 'submit';
-        } else if (type === 'update') {
-            this.button.value = 'Update';
-            this.button.type = 'button';
-            this.button.setAttribute('data-id', this.currentId);
-        }
-    }
-    static updateTableRow(userData, id) {
-        let row = document.querySelector(`#users-list tr[data-id="${id}"]`);
-        if (!row) {
-            row = document.createElement('tr');
-            row.setAttribute('data-id', id);
-            document.querySelector('#users-list').appendChild(row);
-        }
-        if (row) {
-            row.innerHTML = `
-        <td>${userData.name}</td>
-        <td>${userData.lName}</td>
-        <td>${userData.age}</td>
-        <td>${userData.phone}</td>
-        <td>${userData.address}</td>
-        <td>
-          <button class="delete" data-id="${id}">Delete</button>
-          <button class="edit" data-id="${id}">Edit</button>
-        </td>
-      `;
-        }
-    }
-    static dataFromForm() {
-        let userData = {};
-        this.inputFields.forEach(({ name, value }) => {
-            userData[name] = value;
-        });
-        return userData;
-    }
-    static clearForm() {
-        this.formTitle.innerHTML = this.text.newUser;
-        this.inputFields.forEach((input) => {
-            input.value = '';
-        });
-    }
-    static userToForm(user) {
-        this.inputFields.forEach((input) => {
-            input.value = user[input.id];
-        });
-    }
-    static createModal(header, text) {
-        this.modal.classList.add('open');
-        const modalContent = this.modal.querySelector('.modal_content');
-        modalContent.querySelector('p').textContent = text;
-        modalContent.querySelector('h2').textContent = header;
-    }
-    static closeModal() {
-        this.modal.classList.remove('open');
-    }
-    static loaderHandler(action) {
-        if (action) {
-            this.loader.style.display = 'block';
-        } else {
-            this.loader.style.display = 'none';
         }
     }
 }
