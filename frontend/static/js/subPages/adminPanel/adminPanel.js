@@ -17,21 +17,24 @@ export default class AdminPanel {
         this.users.forEach((user) => {
             usersPrint += `
     <tr data-id=${user._id}>
+    <td> <i class="ri-user-line ri-lg"></i> </td>
     <td>${user.name}</td>
     <td>${user.lName}</td>
     <td>${user.age}</td>
     <td>${user.phone}</td>
     <td>${user.address}</td>
-    <td><button class="delete" data-id="${user._id}">Delete</button>
-    <button class="edit" data-id="${user._id}">Edit</button></td>
+    <td>
+    <button class="edit" data-id="${user._id}"><i class="ri-pencil-line ri-lg"></i></button>
+    <button class="delete" data-id="${user._id}"><i class="ri-delete-bin-7-line ri-lg"></i></button>
+    </td>
     </tr>
     `;
         });
         return `
-    
         <table id='users-list'>
         <thead>
           <tr>
+            <th><i class="ri-team-line ri-2x"></i></th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Age</th>
@@ -110,17 +113,14 @@ export default class AdminPanel {
 
     getHtml() {
         return `
-        
-      <header>
-      <h1 class="title"><a href='/' route>Users List</a></h1>
-      ${this.dbSelect()}   
-      </header>
+      
       ${this.modal()}
       ${this.loader()}
     <div class='content'>
     <h2>Users Data</h2>
+${this.dbSelect()}  
 ${this.tableUsers()}
-${this.formUsers()}  
+${this.formUsers()} 
   </div>
     `;
     }

@@ -1,9 +1,17 @@
 @import './mixins.scss';
 @import 'features/modal.scss';
 @import 'features/loader.scss';
+@import 'features/header.scss';
 @import 'subPages/adminPanel.scss';
 @import 'subPages/home.scss';
 
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background-color: #0d1117;
+}
+#app {
+    max-width: 1280px;
+    margin: 0 auto;
 }

@@ -1,0 +1,18 @@
+header {
+    margin: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    background-color: #151b23;
+    .title {
+        text-shadow: 1px 1px grey;
+        margin-left: 40px;
+        align-self: center;
+        color: white;
+    }
+    a {
+        text-decoration: none;
+        color: white;
+    }
+}

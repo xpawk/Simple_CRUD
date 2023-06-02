@@ -1,3 +1,6 @@
+$whiteText: #e6edf3;
+$greyBlack: #151b23;
+$greyLight: #30363d;
 @mixin coverBackground {
     background-color: rgba(245, 255, 255, 0.6);
     width: 100vw;
@@ -7,7 +10,7 @@
     left: 0;
 }
 @mixin button {
-    background-color: #4caf50;
+    background-color: #238637;
     color: white;
     padding: 12px 20px;
     border: none;

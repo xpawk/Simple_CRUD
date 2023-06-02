@@ -48,6 +48,7 @@ export default class DomOperations {
         }
         if (row) {
             row.innerHTML = `
+        <td> <i class="ri-user-line ri-lg"></i> </td>
         <td>${userData.name}</td>
         <td>${userData.lName}</td>
         <td>${userData.age}</td>
