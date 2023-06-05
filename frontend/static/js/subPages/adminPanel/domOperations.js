@@ -6,7 +6,7 @@ export default class DomOperations {
         this.inputFields = document.querySelectorAll(
             '#user-form input[type="text"]',
         );
-        this.formTitle = document.querySelector('#users_title');
+        this.formTitle = document.querySelector('#user_form_title');
         this.button = document.querySelector('#user-form .submit_button');
         this.text = {
             newUser: 'Input Data About New Users',

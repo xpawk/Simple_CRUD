@@ -1,0 +1,42 @@
+#user_form_title {
+    text-align: center;
+    margin-top: 50px;
+    width: 100%;
+    color: $whiteText;
+}
+.user_form {
+    margin: 0 auto;
+    color: $whiteText;
+    max-width: 600px;
+    width: 100%;
+    fieldset {
+        padding: 25px;
+        background-color: $greyBlack;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        border: solid 1px $greyLight;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        padding-bottom: 10px;
+    }
+    input[type='text'] {
+        width: 100%;
+        height: 35px;
+        border: solid 1px $greyLight;
+        border-radius: 8px;
+        overflow: hidden;
+        color: $whiteText;
+        text-indent: 10px;
+        background: black;
+    }
+}
+.submit_button {
+    @include button;
+    margin-top: 20px;
+    grid-column: 1 / span 2;
+}

@@ -49,24 +49,29 @@ export default class AdminPanel {
       </table>`;
     }
     formUsers() {
-        return `<h2 id='users_title'>Input Data About New User</h2>
-    <form id="user-form">
+        return `<h2 id='user_form_title' >Input Data About New User</h2>
+    <form id="user-form" class='user_form'>
       <fieldset>
+      <div>
         <label for="name">First Name</label>
-        <input type="text" id="name" name="name" required>
-
+        <input type="text" id="name" name="name">
+        </div>
+        <div>
         <label for="lName">Last Name</label>
-        <input type="text" id="lName" name="lName" required>
-
+        <input type="text" id="lName" name="lName">
+        </div>
+        <div>
         <label for="age">Age</label>
-        <input type="text" id="age" name="age" required>
-
+        <input type="text" id="age" name="age">
+        </div>
+        <div>
         <label for="phone">Phone num.</label>
-        <input type="text" id="phone" name="phone" required>
-
+        <input type="text" id="phone" name="phone">
+        </div>
+        <div>
         <label for="address">Address</label>
-        <input type="text" id="address" name="address" required>
-
+        <input type="text" id="address" name="address">
+        </div>
         <input type="submit" class='submit_button' value="Add">
       </fieldset>
     </form>
@@ -112,7 +117,7 @@ export default class AdminPanel {
       ${this.modal()}
       ${this.loader()}
     <div class='content'>
-    <h2>Users Data</h2>
+    <h2 class='table_title'>Users Data</h2>
 ${this.dbSelect()}  
 ${this.tableUsers()}
 ${this.formUsers()} 

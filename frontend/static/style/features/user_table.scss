@@ -1,0 +1,63 @@
+.table_title {
+    text-align: left;
+    color: $whiteText;
+}
+
+#users-list {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    font-size: 16px;
+    text-align: left;
+    border: solid 1px $greyLight;
+    border-radius: 8px;
+    overflow: hidden;
+    tr:hover {
+        background-color: $greyBlack;
+    }
+    td,
+    th {
+        font-size: 14px;
+        color: $whiteText;
+        padding: 4px;
+        height: 50px;
+        max-width: 70px;
+        border-bottom: 1px solid $greyLight;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        &:last-of-type {
+            padding-right: 20px;
+            text-align: end;
+            text-overflow: clip;
+        }
+        &:first-of-type {
+            text-align: center;
+            width: 0px;
+            padding: 4px 20px;
+            min-width: 0px;
+        }
+        &:nth-of-type(4) {
+            width: 60px;
+            min-width: 50px;
+        }
+    }
+
+    th {
+        height: 40px;
+        color: $whiteText;
+        background-color: $greyBlack;
+        font-weight: bold;
+
+        text-overflow: clip;
+        &:first-of-type {
+            text-align: center;
+            min-width: 0px;
+        }
+    }
+    .edit,
+    .delete {
+        @include button_sec;
+    }
+}
