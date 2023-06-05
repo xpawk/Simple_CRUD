@@ -45,7 +45,16 @@ export default class Events {
         try {
             this.preventSubmit();
             document.body.addEventListener('click', (e) => {
-                const target = e.target;
+                let target = e.target;
+                while (
+                    target != null &&
+                    !Array.from(target.classList).some((r) =>
+                        this.handlers.hasOwnProperty(r),
+                    )
+                ) {
+                    target = target.parentElement;
+                }
+                if (target == null) return;
                 const classList = target.classList;
                 this.currentId = target.getAttribute('data-id');
                 this.currentUser = this.users.find(

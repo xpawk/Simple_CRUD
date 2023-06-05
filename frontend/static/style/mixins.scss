@@ -1,6 +1,7 @@
 $whiteText: #e6edf3;
 $greyBlack: #151b23;
 $greyLight: #30363d;
+$green: #2fa043;
 @mixin coverBackground {
     background-color: rgba(245, 255, 255, 0.6);
     width: 100vw;
@@ -10,7 +11,7 @@ $greyLight: #30363d;
     left: 0;
 }
 @mixin button {
-    background-color: #238637;
+    background-color: $green;
     color: white;
     padding: 12px 20px;
     border: none;
@@ -22,6 +23,21 @@ $greyLight: #30363d;
         transform: translate(0, -5px);
         transition-duration: 500ms;
         color: black;
+    }
+}
+@mixin button_sec {
+    background-color: transparent;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition-duration: 500ms;
+    &:hover {
+        transform: translate(0, -5px);
+        transition-duration: 500ms;
+        color: $green;
     }
 }
 

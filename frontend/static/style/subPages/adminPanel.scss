@@ -25,6 +25,7 @@ table {
         text-overflow: clip;
         color: $whiteText;
         padding: 4px;
+        height: 50px;
         width: 150px;
         min-width: 70px;
         border-bottom: 1px solid $greyLight;
@@ -63,35 +64,9 @@ h2 {
     color: $whiteText;
 }
 
-form {
-    margin: 0 auto;
-    font-size: 16px;
-}
-
-fieldset {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    column-gap: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: $whiteText;
-}
-
-input[type='text'],
-input[type='number'] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-    margin-bottom: 16px;
-}
-
 .edit,
 .delete {
-    @include button;
+    @include button_sec;
 }
 .submit_button {
     background-color: #4caf50;
@@ -109,22 +84,33 @@ input[type='number'] {
     .update_env_button {
         @include button;
     }
-}
-#environment-select {
-    background-color: $greyBlack;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: $whiteText;
-    font-size: 16px;
-    padding: 8px;
-    width: 180px;
+    #environment-select {
+        background-color: $greyBlack;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: $whiteText;
+        font-size: 16px;
+        padding: 8px;
+        width: 180px;
 
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
+        }
+        option {
+            background-color: #fff;
+            color: #333;
+        }
     }
-    option {
-        background-color: #fff;
-        color: #333;
+    @media (max-width: 574px) {
+        width: 100%;
+        margin: 0;
+        margin-right: auto;
+        padding-bottom: 20px;
     }
+}
+#users_title {
+    text-align: center;
+    margin-top: 50px;
+    width: 100%;
 }

@@ -55,8 +55,8 @@ export default class DomOperations {
         <td>${userData.phone}</td>
         <td>${userData.address}</td>
         <td>
-          <button class="delete" data-id="${id}">Delete</button>
-          <button class="edit" data-id="${id}">Edit</button>
+        <button class="edit" data-id="${userData._id}"><i class="ri-pencil-line ri-lg"></i></button>
+        <button class="delete" data-id="${userData._id}"><i class="ri-delete-bin-7-line ri-lg"></i></button>
         </td>
       `;
         }

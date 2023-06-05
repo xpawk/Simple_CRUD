@@ -7,11 +7,19 @@
 
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
 }
 body {
     background-color: #0d1117;
+    overflow-x: hidden;
+    min-width: 100%;
 }
 #app {
     max-width: 1280px;
     margin: 0 auto;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }

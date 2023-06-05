@@ -49,29 +49,24 @@ export default class AdminPanel {
       </table>`;
     }
     formUsers() {
-        return `<h2 id='users_title'>Input Data About New Users</h2>
+        return `<h2 id='users_title'>Input Data About New User</h2>
     <form id="user-form">
       <fieldset>
-      <div>
         <label for="name">First Name</label>
         <input type="text" id="name" name="name" required>
-      </div>
-      <div>
+
         <label for="lName">Last Name</label>
         <input type="text" id="lName" name="lName" required>
-        </div>
-        <div>
+
         <label for="age">Age</label>
         <input type="text" id="age" name="age" required>
-        </div>
-        <div>
+
         <label for="phone">Phone num.</label>
         <input type="text" id="phone" name="phone" required>
-        </div>
-        <div>
+
         <label for="address">Address</label>
         <input type="text" id="address" name="address" required>
-        </div>
+
         <input type="submit" class='submit_button' value="Add">
       </fieldset>
     </form>
@@ -87,7 +82,7 @@ export default class AdminPanel {
             this.dbName === 'preprod' ? 'selected' : ' '
         }>Preprod</option>
   </select>
-  <button type='button' class="update_env_button">Update</button>
+  <button type='button' class="update_env_button">Change</button>
   </div>
     `;
     }
