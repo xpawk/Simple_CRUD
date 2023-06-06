@@ -1,9 +1,10 @@
 $whiteText: #e6edf3;
-$greyBlack: #151b23;
+$greyBlack: #0d1117;
+$grey: #151b23;
 $greyLight: #30363d;
 $green: #2fa043;
 $greyText: #69707a;
-
+$linkBlue: #2f81f7;
 @mixin coverBackground {
     background-color: rgba(245, 255, 255, 0.6);
     width: 100vw;
@@ -27,22 +28,6 @@ $greyText: #69707a;
         color: black;
     }
 }
-@mixin button_sec {
-    background-color: transparent;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition-duration: 500ms;
-    &:hover {
-        transform: translate(0, -5px);
-        transition-duration: 500ms;
-        color: $green;
-    }
-}
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);

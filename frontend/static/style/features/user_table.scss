@@ -58,6 +58,10 @@
     }
     .edit,
     .delete {
-        @include button_sec;
+        @include button;
+        background-color: transparent;
+        &:hover {
+            color: $green;
+        }
     }
 }

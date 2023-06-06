@@ -6,6 +6,7 @@
 @import 'features/user_table.scss';
 @import 'subPages/adminPanel.scss';
 @import 'subPages/home.scss';
+@import 'subPages/loginPage.scss';
 
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,4 +25,10 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+.content {
+    padding: 50px 20px 100px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
 }
