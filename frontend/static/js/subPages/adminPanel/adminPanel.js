@@ -18,11 +18,11 @@ export default class AdminPanel {
             usersPrint += `
     <tr data-id=${user._id}>
     <td> <i class="ri-user-line ri-lg"></i> </td>
+    <td>${user.username}</td>
+    <td>${user.email}</td>
+    <td>${user.password}</td>
     <td>${user.name}</td>
     <td>${user.lName}</td>
-    <td>${user.age}</td>
-    <td>${user.phone}</td>
-    <td>${user.address}</td>
     <td>
     <button class="edit" data-id="${user._id}"><i class="ri-pencil-line ri-lg"></i></button>
     <button class="delete" data-id="${user._id}"><i class="ri-delete-bin-7-line ri-lg"></i></button>
@@ -35,11 +35,11 @@ export default class AdminPanel {
         <thead>
           <tr>
             <th><i class="ri-team-line ri-2x"></i></th>
+            <th>Username</th>
+            <th>E-mail</th>
+            <th>Password</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Age</th>
-            <th>Phone num.</th>
-            <th>Adress</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -48,11 +48,27 @@ export default class AdminPanel {
         </tbody>
       </table>`;
     }
-    formUsers() {
-        return `<h2 id='user_form_title' >Input Data About New User</h2>
+    static formUsers(title = 'Input Data About New User', button = 'Add') {
+        return `<h2 id='user_form_title'>${title}</h2>
     <form id="user-form" class='user_form'>
       <fieldset>
-      <div>
+        <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username">
+        </div>  
+        <div>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email">
+        </div>
+        <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password">
+        </div>
+        <div>
+        <label for="password_c">Confirm Password</label>
+        <input type="password" id="password_c" name="password_c">
+        </div>
+        <div>
         <label for="name">First Name</label>
         <input type="text" id="name" name="name">
         </div>
@@ -60,19 +76,7 @@ export default class AdminPanel {
         <label for="lName">Last Name</label>
         <input type="text" id="lName" name="lName">
         </div>
-        <div>
-        <label for="age">Age</label>
-        <input type="text" id="age" name="age">
-        </div>
-        <div>
-        <label for="phone">Phone num.</label>
-        <input type="text" id="phone" name="phone">
-        </div>
-        <div>
-        <label for="address">Address</label>
-        <input type="text" id="address" name="address">
-        </div>
-        <input type="submit" class='submit_button' value="Add">
+        <button type="submit" class='submit_button'>${button}</button>
       </fieldset>
     </form>
     `;
@@ -91,36 +95,14 @@ export default class AdminPanel {
   </div>
     `;
     }
-    modal() {
-        return `
-    <div class="modal_control">
-  <div class="modal_control_bg "></div>
-  <div class="modal_content">
-    <h2>Success</h2>
-    <p></p>
-    <button class="modal_control_close ">Continue</button>
-  </div>
-  </div>
-    `;
-    }
-
-    loader() {
-        return `<div class='loader'>
-      <div class='loader_content'></div>
-      <div class='loader_bg'></div>
-      </div>`;
-    }
 
     getHtml() {
         return `
-      
-      ${this.modal()}
-      ${this.loader()}
     <div class='content'>
     <h2 class='table_title'>Users Data</h2>
 ${this.dbSelect()}  
 ${this.tableUsers()}
-${this.formUsers()} 
+${AdminPanel.formUsers()} 
   </div>
     `;
     }

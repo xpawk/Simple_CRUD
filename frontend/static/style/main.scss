@@ -11,6 +11,9 @@
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
+    &:focus-visible {
+        outline: auto 1px $green;
+    }
 }
 body {
     background-color: #0d1117;

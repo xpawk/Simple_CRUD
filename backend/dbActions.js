@@ -23,7 +23,15 @@ const dbActions = (app) => {
             res.status(500).json(error.message);
         }
     });
-
+    app.post('/login', async ({ body }, res) => {
+        try {
+            await User.create(body);
+            res.status(200).json('Success');
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).json(error.message);
+        }
+    });
     app.delete('/user/:id', async ({ params: { id = '' } }, res) => {
         try {
             await User.findByIdAndDelete(id);

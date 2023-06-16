@@ -1,6 +1,11 @@
 export default class Loader {
-    constructor(el) {
-        this.loader = el;
+    constructor() {
+        document.querySelector('#app').innerHTML += `    
+        <div class="loader">
+        <div class="loader_content"></div>
+        <div class="loader_bg"></div>
+        </div>`;
+        this.loader = document.querySelector('.loader');
     }
 
     show() {

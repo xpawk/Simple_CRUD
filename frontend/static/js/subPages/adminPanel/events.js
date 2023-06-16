@@ -2,15 +2,16 @@ import { ApiOperations } from '../../apiOperations.js';
 import DomOperations from './domOperations.js';
 import AdminPanel from './adminPanel.js';
 import Loader from '../../utils/Loader.js';
+import Modal from '../../utils/Modal.js';
 export default class Events {
     constructor() {
-        this.envSelect = document.getElementById('environment-select');
-        this.button = document.querySelector('#user-form .submit_button');
         this.handlers = {
             edit: () => this.editHandler(),
             delete: () => this.deleteHandler(),
             submit_button: () => {
-                const submitType = this.button.type;
+                const submitType = document.querySelector(
+                    '#user-form .submit_button',
+                ).type;
                 if (submitType === 'submit') {
                     return this.addHandler();
                 } else if (submitType === 'button') {
@@ -18,15 +19,16 @@ export default class Events {
                 }
             },
             update_env_button: () => this.changeEnv(),
-            modal_control_close: () => this.domOp.closeModal(),
-            modal_control_bg: () => this.domOp.closeModal(),
+            modal_control_close: () => this.modal.closeModal(),
+            modal_control_bg: () => this.modal.closeModal(),
         };
         this.eventHandler();
         return this.variables();
     }
     async variables() {
         try {
-            this.loader = new Loader(document.querySelector('.loader'));
+            this.modal = new Modal();
+            this.loader = new Loader();
             this.domOp = await new DomOperations();
             this.users = await ApiOperations.getUsers();
             return this;
@@ -35,7 +37,7 @@ export default class Events {
         }
     }
 
-    preventSubmit() {
+    preventsubmit() {
         document.querySelector('#user-form').addEventListener('submit', (e) => {
             e.preventDefault();
         });
@@ -43,7 +45,6 @@ export default class Events {
 
     async eventHandler() {
         try {
-            this.preventSubmit();
             document.body.addEventListener('click', (e) => {
                 let target = e.target;
                 while (
@@ -73,6 +74,7 @@ export default class Events {
 
     async addHandler() {
         try {
+            this.preventsubmit();
             await this.loader.withLoader(async () => {
                 let userData = this.domOp.dataFromForm();
                 const response = await ApiOperations.addUser(userData);
@@ -84,9 +86,9 @@ export default class Events {
                         userData,
                         await this.currentUser._id,
                     );
-                    this.domOp.createModal(response, 'User successfully added');
+                    this.modal.createModal(response, 'User successfully added');
                 } else {
-                    this.domOp.createModal('Abort', response);
+                    this.modal.createModal('Abort', response);
                 }
             });
         } catch (err) {
@@ -100,12 +102,12 @@ export default class Events {
                 const response = await ApiOperations.deleteUser(this.currentId);
                 if (response === 'Success') {
                     this.domOp.deleteTableRow(this.currentId);
-                    this.domOp.createModal(
+                    this.modal.createModal(
                         response,
                         'User successfully deleted',
                     );
                 } else {
-                    this.domOp.createModal('Abort', response);
+                    this.modal.createModal('Abort', response);
                 }
             });
         } catch (err) {
@@ -131,16 +133,17 @@ export default class Events {
                     userData,
                     this.currentId,
                 );
+
                 if (response === 'Success') {
                     this.domOp.clearForm();
                     this.domOp.updateTableRow(userData, this.currentId);
                     this.domOp.updateTablebtn('add');
-                    this.domOp.createModal(
+                    this.modal.createModal(
                         response,
                         'User successfully edited',
                     );
                 } else {
-                    this.domOp.createModal('Abort', response);
+                    this.modal.createModal('Abort', response);
                 }
             });
         } catch (err) {
@@ -150,6 +153,7 @@ export default class Events {
 
     async changeEnv() {
         try {
+            this.envSelect = document.getElementById('environment-select');
             if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
                 await this.loader.withLoader(async () => {
                     const response = await ApiOperations.switchEnv(
@@ -162,12 +166,12 @@ export default class Events {
                         this.users = await ApiOperations.getUsers();
                         this.domOp.clearForm();
                         this.domOp.updateTablebtn('add');
-                        this.domOp.createModal(
+                        this.modal.createModal(
                             response,
                             'Enviroment changed successfully',
                         );
                     } else {
-                        this.domOp.createModal('Abort', response);
+                        this.modal.createModal('Abort', response);
                     }
                 });
             }

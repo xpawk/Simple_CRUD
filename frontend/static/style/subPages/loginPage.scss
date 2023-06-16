@@ -1,17 +1,19 @@
 .login {
+    &_content {
+        max-width: 360px;
+        width: 100%;
+    }
     &_title {
         font-weight: lighter;
         font-size: 24px;
         color: $whiteText;
         width: 100%;
-
         margin: 0 auto;
         text-align: center;
     }
     &_form {
         margin: 0 auto;
         color: $whiteText;
-        max-width: 320px;
         width: 100%;
         fieldset {
             margin-top: 20px;
@@ -34,7 +36,9 @@
                 text-decoration: none;
                 color: $linkBlue;
                 font-size: 12px;
-                letter-spacing: 1px;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
             &:last-of-type() {
                 padding-top: 5px;
@@ -56,6 +60,23 @@
             padding: 5px 0px;
             font-weight: 400;
             margin-top: 10px;
+        }
+    }
+    &_register {
+        width: 100%;
+        padding: 3px 35px;
+        margin-top: 15px;
+        border: 1px solid $greyLight;
+        border-radius: 8px;
+        font-size: 15px;
+        color: $whiteText;
+        text-align: center;
+        a {
+            text-decoration: none;
+            color: $linkBlue;
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 }

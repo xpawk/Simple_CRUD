@@ -8,7 +8,7 @@ export default class LoginPage {
     <form id="login-form" class='login_form'>
       <fieldset>
       <div>
-        <label for="name">Username or email address</label>
+        <label for="name">Username or email username</label>
         <input type="text" id="login" name="login">
         </div>
         <div>
@@ -23,10 +23,10 @@ export default class LoginPage {
 
     getHtml() {
         return `
-        <div class='content'>
+        <div class='login_content content'>
  ${this.loginForm()}
     <div class='login_register'>
-    <p>New to Habit Tracker<a href='/register' route></a></p>
+    <p>New to Habit Tracker? <a href='/register' route>Register</a></p>
     </div>
     </div>
     `;

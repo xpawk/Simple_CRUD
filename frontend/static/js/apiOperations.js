@@ -13,6 +13,20 @@ class ApiOperations {
             console.log(err);
         }
     }
+    static async logIn(userData) {
+        try {
+            const response = await fetch(`/login`, {
+                method: 'POST',
+                body: JSON.stringify(userData),
+                headers: {
+                    'content-type': 'application/json',
+                },
+            });
+            return response.json();
+        } catch (err) {
+            console.log(err);
+        }
+    }
     static async deleteUser(id) {
         try {
             const response = await fetch(`/user/${id}`, { method: 'DELETE' });

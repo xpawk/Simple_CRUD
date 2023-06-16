@@ -3,6 +3,8 @@ import AdminPanel from './subPages/adminPanel/adminPanel.js';
 import Home from './subPages/home.js';
 import LoginPage from './subPages/loginPage.js';
 import PasswordReset from './subPages/passwordReset.js';
+import Register from './subPages/register.js';
+
 const routes = [
     {
         view: AdminPanel,
@@ -12,6 +14,7 @@ const routes = [
     { view: Home, path: '/', additionalClasses: [] },
     { view: LoginPage, path: '/login', additionalClasses: [] },
     { view: PasswordReset, path: '/password-reset', additionalClasses: [] },
+    { view: Register, path: '/register', additionalClasses: [Events] },
 ];
 
 const router = async (path = '/') => {
