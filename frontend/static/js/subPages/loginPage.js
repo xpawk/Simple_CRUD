@@ -9,13 +9,13 @@ export default class LoginPage {
       <fieldset>
       <div>
         <label for="name">Username or email username</label>
-        <input type="text" id="login" name="login">
+        <input autocomplete="off" type="text" id="login" name="login">
         </div>
         <div>
         <label for="password">Password <a href='/password-reset' route>Forgot Password ?</a></label>
-        <input type="password" id="password" name="password">
+        <input autocomplete="off" type="password" id="password" name="password">
         </div>
-        <input type="submit" class='login_form_submit' value="Sign in">
+        <button type="submit" class='login_form_submit'>Sign in</button>
       </fieldset>
     </form>
         `;

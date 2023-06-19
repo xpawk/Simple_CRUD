@@ -13,11 +13,11 @@ class ApiOperations {
             console.log(err);
         }
     }
-    static async logIn(userData) {
+    static async logIn(credentials) {
         try {
             const response = await fetch(`/login`, {
                 method: 'POST',
-                body: JSON.stringify(userData),
+                body: JSON.stringify(credentials),
                 headers: {
                     'content-type': 'application/json',
                 },

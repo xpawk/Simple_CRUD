@@ -59,9 +59,9 @@ export default class DomOperations {
       `;
         }
     }
-    dataFromForm() {
+    dataFromForm(inputs = this.inputFields) {
         let userData = {};
-        this.inputFields?.forEach(({ name, value }) => {
+        inputs?.forEach(({ name, value }) => {
             userData[name] = value;
         });
         return userData;

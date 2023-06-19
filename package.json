@@ -1,9 +1,11 @@
 {
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.2",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
         "feather-icons": "^4.29.0",
+        "jsonwebtoken": "^9.0.0",
         "mongodb": "^5.1.0",
         "mongoose": "^7.0.3",
         "nodemon": "^2.0.22",
@@ -14,6 +16,7 @@
         "build": "nodemon backend/server.js",
         "compile": "sass --watch --no-source-map frontend/static/style/main.scss frontend/static/style/core/main.css",
         "watch": "nodemon --ext *",
+        "defaultRegistry": "npm set registry https://registry.npmjs.org/",
         "dev": "npm run build & npm run compile"
     }
 }

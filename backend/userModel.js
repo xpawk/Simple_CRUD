@@ -3,23 +3,25 @@ const userSchema = mongoose.Schema(
     {
         name: {
             type: String,
-            required: [true, 'Please enter name'],
+            required: [true, 'Please enter name\n'],
         },
         lName: {
             type: String,
-            required: [true, 'Please enter last name '],
+            required: [true, 'Please enter last name\n'],
         },
         email: {
             type: String,
-            required: [true, 'Please enter email'],
+            required: [true, 'Please enter email\n'],
+            unique: true,
         },
         password: {
             type: String,
-            required: [true, 'Please enter password number'],
+            required: [true, 'Please enter password number\n'],
         },
         username: {
             type: String,
-            required: [true, 'Please enter username'],
+            required: [true, 'Please enter username\n'],
+            unique: true,
         },
     },
     {

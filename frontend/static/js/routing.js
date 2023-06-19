@@ -1,4 +1,4 @@
-import Events from './subPages/adminPanel/events.js';
+import Events from './events.js';
 import AdminPanel from './subPages/adminPanel/adminPanel.js';
 import Home from './subPages/home.js';
 import LoginPage from './subPages/loginPage.js';
@@ -12,7 +12,7 @@ const routes = [
         additionalClasses: [Events],
     },
     { view: Home, path: '/', additionalClasses: [] },
-    { view: LoginPage, path: '/login', additionalClasses: [] },
+    { view: LoginPage, path: '/login', additionalClasses: [Events] },
     { view: PasswordReset, path: '/password-reset', additionalClasses: [] },
     { view: Register, path: '/register', additionalClasses: [Events] },
 ];

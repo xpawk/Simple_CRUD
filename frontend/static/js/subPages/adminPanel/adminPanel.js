@@ -54,27 +54,27 @@ export default class AdminPanel {
       <fieldset>
         <div>
         <label for="username">Username</label>
-        <input type="text" id="username" name="username">
+        <input autocomplete="off" type="text" id="username" name="username">
         </div>  
         <div>
         <label for="email">E-mail</label>
-        <input type="email" id="email" name="email">
+        <input autocomplete="off" type="email" id="email" name="email">
         </div>
         <div>
         <label for="password">Password</label>
-        <input type="password" id="password" name="password">
+        <input autocomplete="off" type="password" id="password" name="password">
         </div>
         <div>
         <label for="password_c">Confirm Password</label>
-        <input type="password" id="password_c" name="password_c">
+        <input autocomplete="off" type="password" id="password_c" name="password_c">
         </div>
         <div>
         <label for="name">First Name</label>
-        <input type="text" id="name" name="name">
+        <input autocomplete="off" type="text" id="name" name="name">
         </div>
         <div>
         <label for="lName">Last Name</label>
-        <input type="text" id="lName" name="lName">
+        <input autocomplete="off" type="text" id="lName" name="lName">
         </div>
         <button type="submit" class='submit_button'>${button}</button>
       </fieldset>

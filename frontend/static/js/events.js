@@ -1,8 +1,9 @@
-import { ApiOperations } from '../../apiOperations.js';
-import DomOperations from './domOperations.js';
-import AdminPanel from './adminPanel.js';
-import Loader from '../../utils/Loader.js';
-import Modal from '../../utils/Modal.js';
+import { ApiOperations } from './apiOperations.js';
+import DomOperations from './subPages/adminPanel/domOperations.js';
+import AdminPanel from './subPages/adminPanel/adminPanel.js';
+import Loader from './utils/Loader.js';
+import Modal from './utils/Modal.js';
+
 export default class Events {
     constructor() {
         this.handlers = {
@@ -21,6 +22,7 @@ export default class Events {
             update_env_button: () => this.changeEnv(),
             modal_control_close: () => this.modal.closeModal(),
             modal_control_bg: () => this.modal.closeModal(),
+            login_form_submit: () => this.loginHandler(),
         };
         this.eventHandler();
         return this.variables();
@@ -38,13 +40,12 @@ export default class Events {
     }
 
     preventsubmit() {
-        document.querySelector('#user-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-        });
+        document.addEventListener('submit', (e) => e.preventDefault());
     }
 
     async eventHandler() {
         try {
+            this.preventsubmit();
             document.body.addEventListener('click', (e) => {
                 let target = e.target;
                 while (
@@ -74,7 +75,6 @@ export default class Events {
 
     async addHandler() {
         try {
-            this.preventsubmit();
             await this.loader.withLoader(async () => {
                 let userData = this.domOp.dataFromForm();
                 const response = await ApiOperations.addUser(userData);
@@ -175,6 +175,23 @@ export default class Events {
                     }
                 });
             }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    async loginHandler() {
+        try {
+            const credentials = this.domOp.dataFromForm(
+                document.querySelectorAll('#login-form input'),
+            );
+            this.loader.withLoader(async () => {
+                const response = await ApiOperations.logIn(credentials);
+                if (response === 'success') {
+                    console.log('success', response.data);
+                } else {
+                    this.modal.createModal('Abort', response);
+                }
+            });
         } catch (err) {
             console.log(err);
         }
