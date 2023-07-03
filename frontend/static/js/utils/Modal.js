@@ -6,18 +6,20 @@ export default class Modal {
         <div class="modal_content">
           <h2>Success</h2>
           <p></p>
-          <button class="modal_control_close">Continue</button>
+          <button tabindex="1" class="modal_control_close">Continue</button>
         </div>
         </div>
         `;
     }
     createModal(header, text) {
         this.modal = document.querySelector('.modal_control');
+        this.modalContent = this.modal.querySelector('.modal_content');
+        this.modalButton = this.modal.querySelector('.modal_control_close');
         this.modal.classList.add('open');
-        const modalContent = this.modal.querySelector('.modal_content');
+        this.modalButton.focus();
         document.body.style.overflow = 'hidden';
-        modalContent.querySelector('p').textContent = text;
-        modalContent.querySelector('h2').textContent = header;
+        this.modalContent.querySelector('p').textContent = text;
+        this.modalContent.querySelector('h2').textContent = header;
     }
     closeModal() {
         document.body.style.overflow = '';

@@ -16,12 +16,17 @@ const userSchema = mongoose.Schema(
         },
         password: {
             type: String,
-            required: [true, 'Please enter password number\n'],
+            required: [true, 'Please enter password\n'],
         },
         username: {
             type: String,
             required: [true, 'Please enter username\n'],
             unique: true,
+        },
+        status: {
+            type: String,
+            required: [true, 'Please enter status\n'],
+            default: 'Unverified',
         },
     },
     {

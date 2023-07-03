@@ -35,9 +35,20 @@
             padding: 4px 20px;
             min-width: 0px;
         }
-        &:nth-of-type(4) {
-            width: 60px;
-            min-width: 50px;
+        input,
+        select {
+            width: 100%;
+            height: 35px;
+            border: solid 1px $greyLight;
+            border-radius: 8px;
+            overflow: hidden;
+            color: $whiteText;
+            text-indent: 10px;
+            padding-right: 20px;
+            background: black;
+        }
+        select {
+            @include chevronToLeft;
         }
     }
 
@@ -54,7 +65,8 @@
         }
     }
     .edit,
-    .delete {
+    .delete,
+    .save {
         @include button;
         background-color: transparent;
         &:hover {

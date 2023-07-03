@@ -26,6 +26,12 @@ const dbActions = (app) => {
                 if (!body[key] || typeof body[key] !== 'string') {
                     return res.json(`Invalid ${key}`);
                 }
+                if (body[key].length > 16) {
+                    return res.json(`To long ${key}`);
+                }
+            }
+            if (!isEmail(body.email)) {
+                return res.json('Enter correct e-mail');
             }
             if (body.password.length < 6) {
                 return res.json(`Password should be at least 6 characters`);
@@ -60,7 +66,8 @@ const dbActions = (app) => {
             } else {
                 user = await User.findOne({ username: login }).lean();
             }
-            if (await bcrypt.compare(password, user.password)) {
+
+            if (user && (await bcrypt.compare(password, user.password))) {
                 const token = jwt.sign(
                     {
                         id: user._id,

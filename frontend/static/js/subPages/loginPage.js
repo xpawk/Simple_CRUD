@@ -9,13 +9,13 @@ export default class LoginPage {
       <fieldset>
       <div>
         <label for="name">Username or email username</label>
-        <input autocomplete="off" type="text" id="login" name="login">
+        <input autocomplete="off" tabindex="1" type="text" id="login" name="login">
         </div>
         <div>
-        <label for="password">Password <a href='/password-reset' route>Forgot Password ?</a></label>
-        <input autocomplete="off" type="password" id="password" name="password">
+        <label for="password">Password <a tabindex="2" href='/password-reset' route>Forgot Password ?</a></label>
+        <input autocomplete="off" tabindex="1" type="password" id="password" name="password">
         </div>
-        <button type="submit" class='login_form_submit'>Sign in</button>
+        <button type="submit" tabindex="1" class='login_form_submit'>Sign in</button>
       </fieldset>
     </form>
         `;
@@ -26,7 +26,7 @@ export default class LoginPage {
         <div class='login_content content'>
  ${this.loginForm()}
     <div class='login_register'>
-    <p>New to Habit Tracker? <a href='/register' route>Register</a></p>
+    <p>New to Habit Tracker? <a tabindex="2" href='/register' route>Register</a></p>
     </div>
     </div>
     `;

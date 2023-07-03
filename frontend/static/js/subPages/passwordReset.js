@@ -6,8 +6,6 @@ export default class PasswordReset {
     getHtml() {
         return `
         <div class='content'>
- 
-    
     </div>
     `;
     }

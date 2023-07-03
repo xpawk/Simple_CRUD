@@ -20,7 +20,7 @@ export default class AdminPanel {
     <td> <i class="ri-user-line ri-lg"></i> </td>
     <td>${user.username}</td>
     <td>${user.email}</td>
-    <td>${user.password}</td>
+    <td>${user.status}</td>
     <td>${user.name}</td>
     <td>${user.lName}</td>
     <td>
@@ -37,7 +37,7 @@ export default class AdminPanel {
             <th><i class="ri-team-line ri-2x"></i></th>
             <th>Username</th>
             <th>E-mail</th>
-            <th>Password</th>
+            <th>Status</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Actions</th>
@@ -50,7 +50,7 @@ export default class AdminPanel {
     }
     static formUsers(title = 'Input Data About New User', button = 'Add') {
         return `<h2 id='user_form_title'>${title}</h2>
-    <form id="user-form" class='user_form'>
+    <form id="user-form" class='user_form' novalidate>
       <fieldset>
         <div>
         <label for="username">Username</label>

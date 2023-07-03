@@ -5,6 +5,7 @@
         @include button;
     }
     #environment-select {
+        @include chevronToLeft;
         background-color: $greyBlack;
         border: 1px solid #ccc;
         border-radius: 4px;

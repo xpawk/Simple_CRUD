@@ -8,6 +8,7 @@ export default class Events {
     constructor() {
         this.handlers = {
             edit: () => this.editHandler(),
+            save: () => this.updateUser(),
             delete: () => this.deleteHandler(),
             submit_button: () => {
                 const submitType = document.querySelector(
@@ -77,6 +78,13 @@ export default class Events {
         try {
             await this.loader.withLoader(async () => {
                 let userData = this.domOp.dataFromForm();
+                if (userData.password !== userData.password_c) {
+                    this.modal.createModal(
+                        'Abort',
+                        'Passwords are not the same',
+                    );
+                    return;
+                }
                 const response = await ApiOperations.addUser(userData);
                 if (response === 'Success') {
                     this.users = await ApiOperations.getUsers();
@@ -117,9 +125,7 @@ export default class Events {
 
     async editHandler() {
         try {
-            this.domOp.setFormTitle(this.currentUser);
-            this.domOp.updateTablebtn('update', this.currentId);
-            this.domOp.userToForm(this.currentUser);
+            this.domOp.changeToInputs(this.currentId);
         } catch (err) {
             console.log(err);
         }
@@ -128,7 +134,7 @@ export default class Events {
     async updateUser() {
         try {
             await this.loader.withLoader(async () => {
-                let userData = this.domOp.dataFromForm();
+                let userData = this.domOp.dataFromTableRow(this.currentId);
                 const response = await ApiOperations.editUser(
                     userData,
                     this.currentId,
@@ -186,8 +192,9 @@ export default class Events {
             );
             this.loader.withLoader(async () => {
                 const response = await ApiOperations.logIn(credentials);
-                if (response === 'success') {
-                    console.log('success', response.data);
+                if (response.status === 'Success') {
+                    console.log('Success', response.data);
+                    window.location.pathname = '';
                 } else {
                     this.modal.createModal('Abort', response);
                 }
