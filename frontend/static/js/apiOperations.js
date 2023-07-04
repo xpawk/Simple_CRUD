@@ -87,6 +87,20 @@ class ApiOperations {
             console.log(err);
         }
     }
+    static async changePassword(passwordInfo) {
+        try {
+            const response = await fetch('/changePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(passwordInfo),
+            });
+            return response.json();
+        } catch (err) {
+            console.log(err);
+        }
+    }
 }
 
 export { ApiOperations };

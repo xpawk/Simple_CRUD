@@ -20,6 +20,7 @@ export default class Events {
                     return this.updateUser();
                 }
             },
+            passwordChange_button: () => this.changePassword(),
             update_env_button: () => this.changeEnv(),
             modal_control_close: () => this.modal.closeModal(),
             modal_control_bg: () => this.modal.closeModal(),
@@ -78,25 +79,23 @@ export default class Events {
         try {
             await this.loader.withLoader(async () => {
                 let userData = this.domOp.dataFromForm();
-                if (userData.password !== userData.password_c) {
-                    this.modal.createModal(
-                        'Abort',
-                        'Passwords are not the same',
-                    );
-                    return;
-                }
-                const response = await ApiOperations.addUser(userData);
-                if (response === 'Success') {
-                    this.users = await ApiOperations.getUsers();
-                    this.currentUser = this.users.slice(-1)[0];
-                    this.domOp.clearForm();
-                    this.domOp.updateTableRow(
-                        userData,
-                        await this.currentUser._id,
-                    );
-                    this.modal.createModal(response, 'User successfully added');
-                } else {
-                    this.modal.createModal('Abort', response);
+                if (this.isPassSame(userData)) {
+                    const response = await ApiOperations.addUser(userData);
+                    if (response === 'Success') {
+                        this.users = await ApiOperations.getUsers();
+                        this.currentUser = this.users.slice(-1)[0];
+                        this.domOp.clearForm();
+                        this.domOp.updateTableRow(
+                            userData,
+                            await this.currentUser._id,
+                        );
+                        this.modal.createModal(
+                            response,
+                            'User successfully added',
+                        );
+                    } else {
+                        this.modal.createModal('Abort', response);
+                    }
                 }
             });
         } catch (err) {
@@ -193,7 +192,7 @@ export default class Events {
             this.loader.withLoader(async () => {
                 const response = await ApiOperations.logIn(credentials);
                 if (response.status === 'Success') {
-                    console.log('Success', response.data);
+                    sessionStorage.setItem('token', response.data);
                     window.location.pathname = '';
                 } else {
                     this.modal.createModal('Abort', response);
@@ -201,6 +200,32 @@ export default class Events {
             });
         } catch (err) {
             console.log(err);
+        }
+    }
+    async changePassword() {
+        let passwordInfo = this.domOp.dataFromForm(
+            document.querySelectorAll('#password-change input'),
+        );
+        passwordInfo.token = sessionStorage.getItem('token');
+        this.loader.withLoader(async () => {
+            if (this.isPassSame(passwordInfo)) {
+                const response = await ApiOperations.changePassword(
+                    passwordInfo,
+                );
+                if (response.status === 'Success') {
+                    this.modal.createModal('Success', 'Password changed');
+                } else {
+                    this.modal.createModal('Abort', response);
+                }
+            }
+        });
+    }
+    isPassSame(userData) {
+        if (userData.password === userData.password_c) {
+            return true;
+        } else {
+            this.modal.createModal('Abort', 'Passwords are not the same');
+            return false;
         }
     }
 }
