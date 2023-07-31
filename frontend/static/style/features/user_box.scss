@@ -1,0 +1,16 @@
+.user_box {
+    margin-left: auto;
+    display: flex;
+    align-self: center;
+    i {
+        color: $whiteText;
+        padding-right: 10px;
+    }
+    span {
+        padding: 0 5px;
+        color: $whiteText;
+    }
+    a:hover {
+        color: $linkBlue;
+    }
+}

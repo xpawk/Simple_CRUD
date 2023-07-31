@@ -1,16 +1,17 @@
-@import './mixins.scss';
-@import 'features/modal.scss';
-@import 'features/loader.scss';
-@import 'features/header.scss';
-@import 'features/user_form.scss';
-@import 'features/user_table.scss';
-@import 'subPages/adminPanel.scss';
-@import 'subPages/home.scss';
-@import 'subPages/loginPage.scss';
-@import 'subPages/passwordChange.scss';
+@import "./mixins.scss";
+@import "features/modal.scss";
+@import "features/loader.scss";
+@import "features/header.scss";
+@import "features/user_form.scss";
+@import "features/user_table.scss";
+@import "features/user_box.scss";
+@import "subPages/adminPanel.scss";
+@import "subPages/home.scss";
+@import "subPages/loginPage.scss";
+@import "subPages/passwordChange.scss";
 
 * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
     &:focus-visible {
         outline: auto 1px $green;

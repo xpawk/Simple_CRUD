@@ -1,11 +1,15 @@
 export default class Home {
     constructor() {
-        document.title = 'Single_page';
+        document.title = "User_management";
     }
     getHtml() {
         return `
-    <h1> Login Page </h1>
+        <div class='home'>
+    <h1> Log in To modify Users </h1>
     <a href='/adminPanel' route>AdminPanel</a>
+    <a href='/password-change' route>Change Password</a>
+        </div>
+   
     `;
     }
 }

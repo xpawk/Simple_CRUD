@@ -1,0 +1,11 @@
+.home {
+    text-align: center;
+    color: $whiteText;
+    a {
+        text-decoration: none;
+        color: $whiteText;
+        &:hover {
+            color: $linkBlue;
+        }
+    }
+}
