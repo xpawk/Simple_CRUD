@@ -2,10 +2,11 @@ class ApiOperations {
     static async addUser(userData) {
         try {
             const response = await fetch(`/user`, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify(userData),
                 headers: {
-                    'content-type': 'application/json',
+                    authorization: sessionStorage.token,
+                    "content-type": "application/json",
                 },
             });
             return response.json();
@@ -16,10 +17,10 @@ class ApiOperations {
     static async logIn(credentials) {
         try {
             const response = await fetch(`/login`, {
-                method: 'POST',
+                method: "POST",
                 body: JSON.stringify(credentials),
                 headers: {
-                    'content-type': 'application/json',
+                    "content-type": "application/json",
                 },
             });
             return response.json();
@@ -29,7 +30,12 @@ class ApiOperations {
     }
     static async deleteUser(id) {
         try {
-            const response = await fetch(`/user/${id}`, { method: 'DELETE' });
+            const response = await fetch(`/user/${id}`, {
+                method: "DELETE",
+                headers: {
+                    authorization: sessionStorage.token,
+                },
+            });
             return response.json();
         } catch (err) {
             console.log(err);
@@ -39,10 +45,11 @@ class ApiOperations {
     static async editUser(userData, id) {
         try {
             const response = await fetch(`/user/${id}`, {
-                method: 'PUT',
+                method: "PUT",
                 body: JSON.stringify(userData),
                 headers: {
-                    'content-type': 'application/json',
+                    authorization: sessionStorage.token,
+                    "content-type": "application/json",
                 },
             });
             return response.json();
@@ -53,7 +60,12 @@ class ApiOperations {
 
     static async getUsers() {
         try {
-            const response = await fetch('/usersTable', { method: 'GET' });
+            const response = await fetch("/usersTable", {
+                method: "GET",
+                headers: {
+                    authorization: sessionStorage.token,
+                },
+            });
             return response.json();
         } catch (err) {
             console.log(err);
@@ -62,10 +74,11 @@ class ApiOperations {
 
     static async switchEnv(env) {
         try {
-            const response = await fetch('/env', {
-                method: 'POST',
+            const response = await fetch("/env", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    authorization: sessionStorage.token,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ env }),
             });
@@ -76,10 +89,11 @@ class ApiOperations {
     }
     static async checkEnv() {
         try {
-            const response = await fetch('/checkEnv', {
-                method: 'GET',
+            const response = await fetch("/checkEnv", {
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
+                    authorization: sessionStorage.token,
+                    "Content-Type": "application/json",
                 },
             });
             return response.json();
@@ -89,10 +103,11 @@ class ApiOperations {
     }
     static async changePassword(passwordInfo) {
         try {
-            const response = await fetch('/changePassword', {
-                method: 'POST',
+            const response = await fetch("/changePassword", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    authorization: sessionStorage.token,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(passwordInfo),
             });

@@ -1,19 +1,26 @@
-import { ApiOperations } from '../../apiOperations.js';
+import { ApiOperations } from "../../apiOperations.js";
+import { router } from "../../routing.js";
 
 export default class AdminPanel {
     constructor() {
-        document.title = 'Users Table';
+        document.title = "Users Table";
         return this.dbData();
     }
 
     async dbData() {
         this.users = await ApiOperations.getUsers();
         this.dbName = await ApiOperations.checkEnv();
-        return this;
+        if (this.users === "unverified" || this.users === "unauthorized") {
+            router("/");
+        } else if (this.users === "missingToken") {
+            router("/login");
+        } else {
+            return this;
+        }
     }
 
     tableUsers() {
-        let usersPrint = '';
+        let usersPrint = "";
         this.users.forEach((user) => {
             usersPrint += `
     <tr data-id=${user._id}>
@@ -48,7 +55,7 @@ export default class AdminPanel {
         </tbody>
       </table>`;
     }
-    static formUsers(title = 'Input Data About New User', button = 'Add') {
+    static formUsers(title = "Input Data About New User", button = "Add") {
         return `<h2 id='user_form_title'>${title}</h2>
     <form id="user-form" class='user_form' novalidate>
       <fieldset>
@@ -84,12 +91,8 @@ export default class AdminPanel {
     dbSelect() {
         return `<div class='env'>
   <select id="environment-select" name="environment">
-        <option value="prod" ${
-            this.dbName === 'prod' ? 'selected' : ' '
-        }>Prod</option>
-        <option value="preprod" ${
-            this.dbName === 'preprod' ? 'selected' : ' '
-        }>Preprod</option>
+        <option value="prod" ${this.dbName === "prod" ? "selected" : " "}>Prod</option>
+        <option value="preprod" ${this.dbName === "preprod" ? "selected" : " "}>Preprod</option>
   </select>
   <button type='button' class="update_env_button">Change</button>
   </div>
