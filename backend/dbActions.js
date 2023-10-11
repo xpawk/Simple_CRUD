@@ -9,22 +9,21 @@ const dbActions = (app) => {
     let currentDB = connectDB();
 
     //changing env
-    app.post("/env", authenticateToken, async ({ body: { env } }, res) => {
+    app.post("/env", authenticateToken, async ({ body: { env }, user }, res, next) => {
         try {
-            if (isAdmin(req.user, res)) {
+            if (isAdmin(user, res)) {
                 currentDB = await connectDB(env);
                 res.status(200).json("Success");
             }
         } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
     app.post(
         "/changePassword",
         authenticateToken,
-        async ({ body: { current_password, password }, user }, res) => {
+        async ({ body: { current_password, password }, user }, res, next) => {
             try {
                 if (user && (await bcrypt.compare(current_password, user.password))) {
                     validation(password, res);
@@ -41,17 +40,16 @@ const dbActions = (app) => {
                         message: "Password changed successfully",
                     });
                 } else {
-                    return res.json("Password is invalid");
+                    throw { message: `Invalid password`, status: 400 };
                 }
             } catch (error) {
-                console.error(error);
-                res.status(500).json(error.message);
+                next(error);
             }
         },
     );
 
     //User register
-    app.post("/user", async ({ body }, res) => {
+    app.post("/user", async ({ body }, res, next) => {
         try {
             validation(body, res);
             body.password = await bcrypt.hash(body.password, 10);
@@ -59,19 +57,22 @@ const dbActions = (app) => {
             res.status(200).json("Success");
         } catch (error) {
             if (error.code === 11000) {
-                return res.json(`User with this ${Object.keys(error.keyValue)[0]} already exist`);
+                return next({
+                    message: `User with this ${Object.keys(error.keyValue)[0]} already exists.`,
+                    status: 400,
+                });
             }
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
-    app.post("/login", async ({ body }, res) => {
+    app.post("/login", async ({ body }, res, next) => {
         try {
+            const loginError = { message: `Invalid password or login`, status: 400 };
             const { login, password } = body;
             for (let key in body) {
                 if (!body[key] || typeof body[key] !== "string") {
-                    return res.json(`Invalid login or password`);
+                    throw loginError;
                 }
             }
             let user;
@@ -92,85 +93,91 @@ const dbActions = (app) => {
                 );
                 res.json({ status: "Success", data: token });
             } else {
-                return res.json(`Invalid login or password`);
+                throw loginError;
             }
         } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
-    app.delete("/user/:id", authenticateToken, async ({ params: { id = "" }, user }, res) => {
+    app.delete("/user/:id", authenticateToken, async ({ params: { id = "" }, user }, res, next) => {
         try {
             if (isAdmin(user, res)) {
                 await User.findByIdAndDelete(id);
                 res.status(200).json("Success");
             }
         } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
-    app.put("/user/:id", authenticateToken, async ({ body, params: { id = "" }, user }, res) => {
-        try {
-            if (isAdmin(user, res)) {
-                validation(body, res);
-                await User.findByIdAndUpdate(id, body);
-                res.status(200).json("Success");
+    app.put(
+        "/user/:id",
+        authenticateToken,
+        async ({ body, params: { id = "" }, user }, res, next) => {
+            try {
+                if (isAdmin(user, res)) {
+                    validation(body, res);
+                    await User.findByIdAndUpdate(id, body);
+                    res.status(200).json("Success");
+                }
+            } catch (error) {
+                next(error);
             }
-        } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
-        }
-    });
+        },
+    );
 
-    app.get("/usersTable", authenticateToken, async (req, res) => {
+    app.get("/usersTable", authenticateToken, async (req, res, next) => {
         try {
             if (isAdmin(req.user, res)) {
                 const fetchDB = await User.find({});
                 res.status(200).json(fetchDB);
             }
         } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
-    app.get("/checkEnv", async (req, res) => {
+    app.get("/checkEnv", async (req, res, next) => {
         try {
             const dbName = await currentDB;
             res.status(200).json(dbName);
         } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
         }
     });
 
-    app.get("/userStatus", authenticateToken, async (req, res) => {
+    app.get("/userStatus", authenticateToken, async ({ user: { status } }, res, next) => {
         try {
-            res.status(200).json(req.user.status);
+            res.status(200).json(status);
         } catch (error) {
-            console.log(error.message);
-            res.status(500).json(error.message);
+            next(error);
+        }
+    });
+    app.use((err, req, res, next) => {
+        console.error(err.message);
+        if (err.status) {
+            res.status(err.status).json(err.message);
+        } else {
+            res.status(500).json("Internal Server Error");
         }
     });
 };
 
-const validation = (body, res) => {
+const validation = (body) => {
     for (let key in body) {
         if (!body[key] || typeof body[key] !== "string") {
-            return res.json(`Invalid ${key}`);
+            throw { message: `Invalid ${key}`, status: 400 };
         }
         if (body[key].length > 26) {
-            return res.json(`To long ${key}`);
+            throw { message: `Too long ${key}`, status: 400 };
         }
     }
     if (body.email && !isEmail(body.email)) {
-        return res.json("Enter correct e-mail");
+        throw { message: "Enter correct e-mail", status: 400 };
     }
     if (body.password && body.password.length < 6) {
-        return res.json(`Password should be at least 6 characters`);
+        throw { message: "Password should be at least 6 characters", status: 400 };
     }
 };
 
@@ -180,20 +187,31 @@ const isEmail = (login) => {
 };
 
 const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader;
-    if (token == null) return res.status(401).json("missingToken");
+    const token = req.headers["authorization"];
+
+    if (!token) {
+        throw { message: "missingToken", status: 401 };
+    }
+
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-        if (err) return res.status(403).json("unauthorized");
-        if (user.status === "Blocked") {
-            return res.status(403).json(user.status);
+        if (err) {
+            throw { message: "unauthorized", status: 403 };
         }
+
+        if (user.status === "Blocked") {
+            throw { message: user.status, status: 403 };
+        }
+
         req.user = await User.findOne({ _id: user.id }).lean();
         next();
     });
 };
 
-const isAdmin = ({ status }, res) => {
-    return status === "Admin" ? true : res.status(403).json("no privileges");
+const isAdmin = ({ status }) => {
+    if (status !== "Admin") {
+        throw { message: "No privileges", status: 403 };
+    }
+    return true;
 };
+
 module.exports = dbActions;
