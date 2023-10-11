@@ -1,5 +1,3 @@
-import { ApiOperations } from "../../apiOperations.js";
-
 export default class DomOperations {
     fieldNames = ["username", "email", "status", "name", "lName"];
 
@@ -14,13 +12,8 @@ export default class DomOperations {
             register: "Sing up to Habit Tracker",
             updateUser: `Update data about `,
         };
-        return this.dbData();
     }
 
-    async dbData() {
-        this.users = await ApiOperations.getUsers();
-        return this;
-    }
     deleteTableRow(id) {
         document.querySelector(`#users-list tr[data-id="${id}"]`).remove();
         if (this.button.getAttribute("data-id") == id) {

@@ -11,8 +11,10 @@ const dbActions = (app) => {
     //changing env
     app.post("/env", authenticateToken, async ({ body: { env } }, res) => {
         try {
-            currentDB = await connectDB(env);
-            res.status(200).json("Success");
+            if (isAdmin(req.user, res)) {
+                currentDB = await connectDB(env);
+                res.status(200).json("Success");
+            }
         } catch (error) {
             console.error(error);
             res.status(500).json(error.message);
@@ -94,9 +96,9 @@ const dbActions = (app) => {
         }
     });
 
-    app.delete("/user/:id", authenticateToken, async ({ params: { id = "" } }, res) => {
+    app.delete("/user/:id", authenticateToken, async ({ params: { id = "" }, user }, res) => {
         try {
-            if (isAdmin(req.user, res)) {
+            if (isAdmin(user, res)) {
                 await User.findByIdAndDelete(id);
                 res.status(200).json("Success");
             }
@@ -121,8 +123,10 @@ const dbActions = (app) => {
 
     app.get("/usersTable", authenticateToken, async (req, res) => {
         try {
-            const fetchDB = await User.find({});
-            res.status(200).json(fetchDB);
+            if (isAdmin(req.user, res)) {
+                const fetchDB = await User.find({});
+                res.status(200).json(fetchDB);
+            }
         } catch (error) {
             console.log(error.message);
             res.status(500).json(error.message);
@@ -133,6 +137,15 @@ const dbActions = (app) => {
         try {
             const dbName = await currentDB;
             res.status(200).json(dbName);
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).json(error.message);
+        }
+    });
+
+    app.get("/userStatus", authenticateToken, async (req, res) => {
+        try {
+            res.status(200).json(req.user.status);
         } catch (error) {
             console.log(error.message);
             res.status(500).json(error.message);
@@ -168,8 +181,8 @@ const authenticateToken = (req, res, next) => {
     if (token == null) return res.status(401).json("missingToken");
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
         if (err) return res.status(403).json("unauthorized");
-        if (user.status === "Unverified" || user.status === "Blocked") {
-            return res.status(403).json("unverified");
+        if (user.status === "Blocked") {
+            return res.status(403).json(user.status);
         }
         req.user = await User.findOne({ _id: user.id }).lean();
         next();

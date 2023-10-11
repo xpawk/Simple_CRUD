@@ -101,6 +101,20 @@ class ApiOperations {
             console.log(err);
         }
     }
+    static async userStatus() {
+        try {
+            const response = await fetch("/userStatus", {
+                method: "GET",
+                headers: {
+                    authorization: sessionStorage.token,
+                    "Content-Type": "application/json",
+                },
+            });
+            return response.json();
+        } catch (err) {
+            console.log(err);
+        }
+    }
     static async changePassword(passwordInfo) {
         try {
             const response = await fetch("/changePassword", {

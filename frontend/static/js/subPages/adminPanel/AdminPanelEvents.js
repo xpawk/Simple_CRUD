@@ -1,10 +1,12 @@
-import { ApiOperations } from "./apiOperations.js";
-import DomOperations from "./subPages/adminPanel/domOperations.js";
-import AdminPanel from "./subPages/adminPanel/adminPanel.js";
-import Loader from "./utils/Loader.js";
-import Modal from "./utils/Modal.js";
+import { ApiOperations } from "../../apiOperations.js";
+import DomOperations from "../../utils/domOperations.js";
+import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
+import { isPassSame } from "../../utils/isPassSame.js";
+import AdminPanel from "./adminPanel.js";
+import Loader from "../../utils/Loader.js";
+import Modal from "../../utils/Modal.js";
 
-export default class Events {
+export default class AdminPanelEvents {
     constructor() {
         this.handlers = {
             edit: () => this.editHandler(),
@@ -18,55 +20,20 @@ export default class Events {
                     return this.updateUser();
                 }
             },
-            passwordChange_button: () => this.changePassword(),
             update_env_button: () => this.changeEnv(),
             modal_control_close: () => this.modal.closeModal(),
             modal_control_bg: () => this.modal.closeModal(),
-            login_form_submit: () => this.loginHandler(),
         };
-        this.eventHandler();
+        new SharedEventHandler(this.handlers, this);
         return this.variables();
     }
     async variables() {
         try {
             this.modal = new Modal();
             this.loader = new Loader();
-            this.domOp = await new DomOperations();
+            this.domOp = new DomOperations();
             this.users = await ApiOperations.getUsers();
             return this;
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    preventsubmit() {
-        document.addEventListener("submit", (e) => e.preventDefault());
-    }
-
-    async eventHandler() {
-        try {
-            this.preventsubmit();
-            document.body.addEventListener("click", (e) => {
-                let target = e.target;
-                while (
-                    target != null &&
-                    !Array.from(target.classList).some((r) => this.handlers.hasOwnProperty(r))
-                ) {
-                    target = target.parentElement;
-                }
-                if (target == null) return;
-                const classList = target.classList;
-                this.currentId = target.getAttribute("data-id");
-
-                if (this.users instanceof Object) {
-                    this.currentUser = this.users.find((user) => user._id === this.currentId);
-                }
-                for (const className in this.handlers) {
-                    if (classList.contains(className)) {
-                        return this.handlers[className]();
-                    }
-                }
-            });
         } catch (err) {
             console.log(err);
         }
@@ -76,7 +43,7 @@ export default class Events {
         try {
             await this.loader.withLoader(async () => {
                 let userData = this.domOp.dataFromForm();
-                if (this.isPassSame(userData)) {
+                if (isPassSame(userData, this.modal)) {
                     const response = await ApiOperations.addUser(userData);
                     if (response === "Success") {
                         this.users = await ApiOperations.getUsers();
@@ -159,48 +126,6 @@ export default class Events {
             }
         } catch (err) {
             console.log(err);
-        }
-    }
-    async loginHandler() {
-        try {
-            const credentials = this.domOp.dataFromForm(
-                document.querySelectorAll("#login-form input"),
-            );
-            this.loader.withLoader(async () => {
-                const response = await ApiOperations.logIn(credentials);
-                if (response.status === "Success") {
-                    sessionStorage.setItem("token", response.data);
-                    window.location.pathname = "";
-                } else {
-                    this.modal.createModal("Abort", response);
-                }
-            });
-        } catch (err) {
-            console.log(err);
-        }
-    }
-    async changePassword() {
-        let passwordInfo = this.domOp.dataFromForm(
-            document.querySelectorAll("#password-change input"),
-        );
-        passwordInfo.token = sessionStorage.getItem("token");
-        this.loader.withLoader(async () => {
-            if (this.isPassSame(passwordInfo)) {
-                const response = await ApiOperations.changePassword(passwordInfo);
-                if (response.status === "Success") {
-                    this.modal.createModal("Success", "Password changed");
-                } else {
-                    this.modal.createModal("Abort", response);
-                }
-            }
-        });
-    }
-    isPassSame(userData) {
-        if (userData.password === userData.password_c) {
-            return true;
-        } else {
-            this.modal.createModal("Abort", "Passwords are not the same");
-            return false;
         }
     }
 }

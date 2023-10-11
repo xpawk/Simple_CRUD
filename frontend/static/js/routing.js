@@ -1,10 +1,11 @@
-import Events from "./events.js";
+import AdminPanelEvents from "./subPages/adminPanel/AdminPanelEvents.js";
 import AdminPanel from "./subPages/adminPanel/adminPanel.js";
 import Home from "./subPages/home.js";
-import LoginPage from "./subPages/loginPage.js";
+import LoginPage from "./subPages/login/loginPage.js";
+import LoginEvents from "./subPages/login/loginEvents.js";
 import PasswordReset from "./subPages/passwordReset.js";
 import Register from "./subPages/register.js";
-import PasswordChange from "./subPages/passwordChange.js";
+import PasswordChange from "./subPages/passwordChange/passwordChange.js";
 import ErrorPage from "./subPages/errorPage.js";
 import { ApiOperations } from "./apiOperations.js";
 
@@ -12,8 +13,9 @@ const routes = [
     {
         view: AdminPanel,
         path: "/adminPanel",
-        additionalClasses: [Events],
+        additionalClasses: [AdminPanelEvents],
         protected: true,
+        allowedRoles: ["Admin"],
     },
     {
         view: ErrorPage,
@@ -22,56 +24,54 @@ const routes = [
         protected: false,
     },
     { view: Home, path: "/", additionalClasses: [], protected: false },
-    { view: LoginPage, path: "/login", additionalClasses: [Events], protected: false },
+    { view: LoginPage, path: "/login", additionalClasses: [LoginEvents], protected: false },
     { view: PasswordReset, path: "/password-reset", additionalClasses: [], protected: false },
-    { view: Register, path: "/register", additionalClasses: [Events], protected: false },
+    {
+        view: Register,
+        path: "/register",
+        additionalClasses: [AdminPanelEvents],
+        protected: false,
+    },
     {
         view: PasswordChange,
         path: "/password-change",
-        additionalClasses: [Events],
+        additionalClasses: [AdminPanelEvents],
         protected: true,
     },
 ];
 
-const isProtectedRoute = (path) => {
-    const route = routes.find((r) => r.path === path);
-    return route && route.protected;
+const renderPage = async (route) => {
+    const view = new route.view();
+    if (typeof view.initialize === "function") {
+        await view.initialize();
+    }
+    document.querySelector("#app").innerHTML = view.getHtml();
+    for (const Class of route.additionalClasses) {
+        new Class();
+    }
+    history.pushState(null, "", route.path);
 };
 
-const isUserAuthorized = (status) => {
-    return !(status === "unauthorized" || status === "missingToken");
+const isUserAuthorized = (status, route) => {
+    if (status === "unauthorized" || status === "missingToken") return false;
+    if (route.allowedRoles && !route.allowedRoles.includes(status)) return false;
+    return true;
 };
 
 const router = async (path = "/") => {
     try {
-        const status = await ApiOperations.checkEnv();
+        const status = await ApiOperations.userStatus();
+        let route = routes.find((r) => r.path === path);
 
-        if (isProtectedRoute(path) && !isUserAuthorized(status)) {
-            path = "/login";
+        if (!route) {
+            route = routes.find((r) => r.path === "/error-page");
         }
 
-        let routeFound = false;
-
-        for (const route of routes) {
-            if (route.path === path) {
-                routeFound = true;
-                const view = new route.view();
-                if (typeof view.initialize === "function") {
-                    await view.initialize();
-                }
-
-                document.querySelector("#app").innerHTML = view.getHtml();
-                for (const Class of route.additionalClasses) {
-                    new Class();
-                }
-                history.pushState(null, "", path);
-                break;
-            }
+        if (route.protected && !isUserAuthorized(status, route)) {
+            route = routes.find((r) => r.path === "/login");
         }
 
-        if (!routeFound) {
-            router("/error-page");
-        }
+        await renderPage(route);
     } catch (error) {
         console.log(error);
     }
