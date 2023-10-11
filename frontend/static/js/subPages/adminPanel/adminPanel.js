@@ -1,22 +1,16 @@
 import { ApiOperations } from "../../apiOperations.js";
-import { router } from "../../routing.js";
-
 export default class AdminPanel {
     constructor() {
         document.title = "Users Table";
-        return this.dbData();
+    }
+
+    async initialize() {
+        await this.dbData();
     }
 
     async dbData() {
         this.users = await ApiOperations.getUsers();
         this.dbName = await ApiOperations.checkEnv();
-        if (this.users === "unverified" || this.users === "unauthorized") {
-            router("/");
-        } else if (this.users === "missingToken") {
-            router("/login");
-        } else {
-            return this;
-        }
     }
 
     tableUsers() {

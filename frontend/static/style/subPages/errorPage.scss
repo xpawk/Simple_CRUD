@@ -1,0 +1,14 @@
+.error-page {
+    padding-top: 100px;
+    color: $whiteText;
+    li {
+        color: $whiteText;
+    }
+    a {
+        text-decoration: none;
+        color: $whiteText;
+        &:hover {
+            color: $linkBlue;
+        }
+    }
+}
