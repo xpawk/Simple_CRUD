@@ -5,7 +5,7 @@ import { isPassSame } from "../../utils/isPassSame.js";
 import Loader from "../../utils/Loader.js";
 import Modal from "../../utils/Modal.js";
 
-export default class LoginEvents {
+export default class PasswordChangeEvents {
     constructor() {
         this.handlers = {
             modal_control_close: () => this.modal.closeModal(),
@@ -34,11 +34,17 @@ export default class LoginEvents {
             if (isPassSame(passwordInfo, this.modal)) {
                 const response = await ApiOperations.changePassword(passwordInfo);
                 if (response.status === "Success") {
-                    this.modal.createModal("Success", "Password changed");
+                    this.modal.createModal(response.status, response.message);
+                    this.clearForm();
                 } else {
                     this.modal.createModal("Abort", response);
                 }
             }
+        });
+    }
+    clearForm() {
+        document.querySelectorAll("#password-change input")?.forEach((input) => {
+            input.value = "";
         });
     }
 }

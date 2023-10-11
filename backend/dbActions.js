@@ -21,30 +21,34 @@ const dbActions = (app) => {
         }
     });
 
-    app.post("/changePassword", authenticateToken, async (req, res) => {
-        try {
-            const { current_password, password } = req.body;
-
-            let user = await User.findOne({ _id: req.user.id }).lean();
-            if (user && (await bcrypt.compare(current_password, user.password))) {
-                validation(body, res);
-                const _id = user._id;
-                const hashedPassword = await bcrypt.hash(password, 10);
-                await User.updateOne(
-                    { _id },
-                    {
-                        $set: { password: hashedPassword },
-                    },
-                );
-                return res.json("Password changed successfully");
-            } else {
-                return res.json("Password is invalid");
+    app.post(
+        "/changePassword",
+        authenticateToken,
+        async ({ body: { current_password, password }, user }, res) => {
+            try {
+                if (user && (await bcrypt.compare(current_password, user.password))) {
+                    validation(password, res);
+                    const _id = user._id;
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    await User.updateOne(
+                        { _id },
+                        {
+                            $set: { password: hashedPassword },
+                        },
+                    );
+                    return res.json({
+                        status: "Success",
+                        message: "Password changed successfully",
+                    });
+                } else {
+                    return res.json("Password is invalid");
+                }
+            } catch (error) {
+                console.error(error);
+                res.status(500).json(error.message);
             }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json(error.message);
-        }
-    });
+        },
+    );
 
     //User register
     app.post("/user", async ({ body }, res) => {

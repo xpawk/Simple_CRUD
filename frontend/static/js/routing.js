@@ -6,6 +6,7 @@ import LoginEvents from "./subPages/login/loginEvents.js";
 import PasswordReset from "./subPages/passwordReset.js";
 import Register from "./subPages/register.js";
 import PasswordChange from "./subPages/passwordChange/passwordChange.js";
+import PasswordChangeEvents from "./subPages/passwordChange/passwordChangeEvents.js";
 import ErrorPage from "./subPages/errorPage.js";
 import { ApiOperations } from "./apiOperations.js";
 
@@ -35,7 +36,7 @@ const routes = [
     {
         view: PasswordChange,
         path: "/password-change",
-        additionalClasses: [AdminPanelEvents],
+        additionalClasses: [PasswordChangeEvents],
         protected: true,
     },
 ];
