@@ -40,6 +40,7 @@ const routes = [
         protected: true,
     },
 ];
+const redirectWhenLogged = ["/login", "/register"];
 
 const renderPage = async (route) => {
     const view = new route.view();
@@ -59,17 +60,19 @@ const isUserAuthorized = (status, route) => {
     return true;
 };
 
+const findRouteByPath = (path) => routes.find((r) => r.path === path);
+
 const router = async (path = "/") => {
     try {
-        const status = await ApiOperations.userStatus();
-        let route = routes.find((r) => r.path === path);
+        let route = findRouteByPath(path);
+        const authorizationStatus = isUserAuthorized(await ApiOperations.userStatus(), route);
 
         if (!route) {
-            route = routes.find((r) => r.path === "/error-page");
-        }
-
-        if (route.protected && !isUserAuthorized(status, route)) {
-            route = routes.find((r) => r.path === "/login");
+            route = findRouteByPath("/error-page");
+        } else if (redirectWhenLogged.includes(path) && authorizationStatus) {
+            route = findRouteByPath("/");
+        } else if (route.protected && !authorizationStatus) {
+            route = findRouteByPath("/login");
         }
 
         await renderPage(route);
