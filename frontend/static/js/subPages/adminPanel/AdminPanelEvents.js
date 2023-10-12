@@ -3,8 +3,8 @@ import DomOperations from "../../utils/domOperations.js";
 import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
 import { isPassSame } from "../../utils/isPassSame.js";
 import AdminPanel from "./adminPanel.js";
-import Loader from "../../utils/Loader.js";
-import Modal from "../../utils/Modal.js";
+import Loader from "../../components/Loader.js";
+import Modal from "../../components/Modal.js";
 
 export default class AdminPanelEvents {
     constructor() {
@@ -25,17 +25,17 @@ export default class AdminPanelEvents {
             modal_control_bg: () => this.modal.closeModal(),
         };
         new SharedEventHandler(this.handlers, this);
-        return this.variables();
+        return this.initialize();
     }
-    async variables() {
+    async initialize() {
         try {
             this.modal = new Modal();
             this.loader = new Loader();
             this.domOp = new DomOperations();
             this.users = await ApiOperations.getUsers();
             return this;
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -56,8 +56,8 @@ export default class AdminPanelEvents {
                     }
                 }
             });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -72,16 +72,16 @@ export default class AdminPanelEvents {
                     this.modal.createModal("Abort", response);
                 }
             });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
     async editHandler() {
         try {
             this.domOp.changeToInputs(this.currentId);
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -100,8 +100,8 @@ export default class AdminPanelEvents {
                     this.modal.createModal("Abort", response);
                 }
             });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -124,8 +124,8 @@ export default class AdminPanelEvents {
                     }
                 });
             }
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 }

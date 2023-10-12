@@ -10,8 +10,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     static async logIn(credentials) {
@@ -24,8 +24,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     static async deleteUser(id) {
@@ -37,8 +37,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -53,8 +53,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -67,11 +67,24 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
-
+    static async getUser() {
+        try {
+            const response = await fetch("/getUser", {
+                method: "GET",
+                headers: {
+                    authorization: sessionStorage.token,
+                    "Content-Type": "application/json",
+                },
+            });
+            return response.json();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
     static async switchEnv(env) {
         try {
             const response = await fetch("/env", {
@@ -83,8 +96,8 @@ class ApiOperations {
                 body: JSON.stringify({ env }),
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     static async checkEnv() {
@@ -97,8 +110,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     static async userStatus() {
@@ -111,8 +124,8 @@ class ApiOperations {
                 },
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     static async changePassword(passwordInfo) {
@@ -126,8 +139,8 @@ class ApiOperations {
                 body: JSON.stringify(passwordInfo),
             });
             return response.json();
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 }

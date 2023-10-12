@@ -1,8 +1,8 @@
 import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
 import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
-import Loader from "../../utils/Loader.js";
-import Modal from "../../utils/Modal.js";
+import Loader from "../../components/Loader.js";
+import Modal from "../../components/Modal.js";
 
 export default class LoginEvents {
     constructor() {
@@ -12,16 +12,16 @@ export default class LoginEvents {
             login_form_submit: () => this.loginHandler(),
         };
         new SharedEventHandler(this.handlers, this);
-        return this.variables();
+        return this.initialize();
     }
-    async variables() {
+    async initialize() {
         try {
             this.modal = new Modal();
             this.loader = new Loader();
             this.domOp = new DomOperations();
             return this;
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 
@@ -39,8 +39,8 @@ export default class LoginEvents {
                     this.modal.createModal("Abort", response);
                 }
             });
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
 }

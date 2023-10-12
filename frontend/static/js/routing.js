@@ -8,7 +8,9 @@ import Register from "./subPages/register.js";
 import PasswordChange from "./subPages/passwordChange/passwordChange.js";
 import PasswordChangeEvents from "./subPages/passwordChange/passwordChangeEvents.js";
 import ErrorPage from "./subPages/errorPage.js";
+import Header from "./components/Header/Header.js";
 import { ApiOperations } from "./apiOperations.js";
+import HeaderEvents from "./components/Header/HeaderEvents.js";
 
 const routes = [
     {
@@ -43,11 +45,10 @@ const routes = [
 const redirectWhenLogged = ["/login", "/register"];
 
 const renderPage = async (route) => {
-    const view = new route.view();
-    if (typeof view.initialize === "function") {
-        await view.initialize();
-    }
-    document.querySelector("#app").innerHTML = view.getHtml();
+    const view = await new route.view();
+    const header = new Header(await ApiOperations.getUser());
+    new HeaderEvents();
+    document.querySelector("#app").innerHTML = header.getHtml() + `<main>${view.getHtml()}</main>`;
     for (const Class of route.additionalClasses) {
         new Class();
     }
@@ -77,7 +78,7 @@ const router = async (path = "/") => {
 
         await renderPage(route);
     } catch (error) {
-        console.log(error);
+        console.error("Error:", error);
     }
 };
 

@@ -154,6 +154,15 @@ const dbActions = (app) => {
             next(error);
         }
     });
+
+    app.get("/getUser", authenticateToken, async ({ user }, res, next) => {
+        try {
+            res.status(200).json(user);
+        } catch (error) {
+            next(error);
+        }
+    });
+
     app.use((err, req, res, next) => {
         console.error(err.message);
         if (err.status) {
@@ -190,19 +199,19 @@ const authenticateToken = (req, res, next) => {
     const token = req.headers["authorization"];
 
     if (!token) {
-        throw { message: "missingToken", status: 401 };
+        return next({ message: "missingToken", status: 401 });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
         if (err) {
-            throw { message: "unauthorized", status: 403 };
+            return next({ message: "unauthorized", status: 403 });
         }
 
-        if (user.status === "Blocked") {
-            throw { message: user.status, status: 403 };
+        if (user?.status === "Blocked") {
+            return next({ message: user.status, status: 403 });
         }
 
-        req.user = await User.findOne({ _id: user.id }).lean();
+        req.user = await User.findOne({ _id: user?.id }).lean();
         next();
     });
 };

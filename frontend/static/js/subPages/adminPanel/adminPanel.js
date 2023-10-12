@@ -2,15 +2,17 @@ import { ApiOperations } from "../../apiOperations.js";
 export default class AdminPanel {
     constructor() {
         document.title = "Users Table";
-    }
-
-    async initialize() {
-        await this.dbData();
+        return this.dbData();
     }
 
     async dbData() {
-        this.users = await ApiOperations.getUsers();
-        this.dbName = await ApiOperations.checkEnv();
+        try {
+            this.users = await ApiOperations.getUsers();
+            this.dbName = await ApiOperations.checkEnv();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+        return this;
     }
 
     tableUsers() {

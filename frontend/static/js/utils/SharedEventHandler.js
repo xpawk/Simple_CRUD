@@ -13,6 +13,7 @@ export class SharedEventHandler {
     eventHandler() {
         document.body.addEventListener("click", (e) => {
             let target = e.target;
+            console.log(target);
             while (
                 target != null &&
                 !Array.from(target.classList).some((r) => this.handlers.hasOwnProperty(r))

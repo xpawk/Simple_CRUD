@@ -2,9 +2,6 @@ export default class ErrorPage {
     constructor() {
         document.title = "Oops, you've found a dead link.";
     }
-    goBack() {
-        window.history.go(-2);
-    }
     getHtml() {
         return `
         <div class='error-page'>

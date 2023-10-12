@@ -2,7 +2,7 @@ header {
     height: 80px;
     width: 100%;
     display: flex;
-    background-color: #151b23;
+    background-color: $grey;
     .header_content {
         margin: 0 auto;
         padding: 0 20px;
@@ -14,14 +14,14 @@ header {
     }
     .title {
         text-shadow: 1px 1px grey;
-        color: white;
+        color: $whiteText;
     }
     a {
         display: flex;
         align-items: center;
         gap: 20px;
         text-decoration: none;
-        color: white;
+        color: $whiteText;
     }
     .logo {
         width: 60px;

@@ -2,8 +2,8 @@ import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
 import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
 import { isPassSame } from "../../utils/isPassSame.js";
-import Loader from "../../utils/Loader.js";
-import Modal from "../../utils/Modal.js";
+import Loader from "../../components/Loader.js";
+import Modal from "../../components/Modal.js";
 
 export default class PasswordChangeEvents {
     constructor() {
@@ -13,16 +13,16 @@ export default class PasswordChangeEvents {
             passwordChange_button: () => this.changePassword(),
         };
         new SharedEventHandler(this.handlers, this);
-        return this.variables();
+        return this.initialize();
     }
-    async variables() {
+    async initialize() {
         try {
             this.modal = new Modal();
             this.loader = new Loader();
             this.domOp = new DomOperations();
             return this;
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            console.error("Error:", error);
         }
     }
     async changePassword() {
