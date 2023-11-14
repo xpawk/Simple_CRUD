@@ -4,7 +4,6 @@ export class SharedEventHandler {
             // Global handlers
             modal_control_close: () => this.context?.modal.closeModal(),
             modal_control_bg: () => this.context?.modal.closeModal(),
-            profile_btn: () => this.context?.openDropDown(),
         };
         this.pageHandlers = {};
         this.preventsubmit();
