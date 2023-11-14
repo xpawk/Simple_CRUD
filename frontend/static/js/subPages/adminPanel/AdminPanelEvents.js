@@ -1,6 +1,5 @@
 import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
-import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
 import { isPassSame } from "../../utils/isPassSame.js";
 import AdminPanel from "./adminPanel.js";
 import Loader from "../../components/Loader.js";
@@ -21,10 +20,7 @@ export default class AdminPanelEvents {
                 }
             },
             update_env_button: () => this.changeEnv(),
-            modal_control_close: () => this.modal.closeModal(),
-            modal_control_bg: () => this.modal.closeModal(),
         };
-        new SharedEventHandler(this.handlers, this);
         return this.initialize();
     }
     async initialize() {

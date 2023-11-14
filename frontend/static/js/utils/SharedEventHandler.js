@@ -1,9 +1,28 @@
 export class SharedEventHandler {
-    constructor(handlers, context) {
-        this.handlers = handlers;
-        this.context = context;
+    constructor() {
+        this.globalHandlers = {
+            // Global handlers
+            modal_control_close: () => this.context?.modal.closeModal(),
+            modal_control_bg: () => this.context?.modal.closeModal(),
+            profile_btn: () => this.context?.openDropDown(),
+        };
+        this.pageHandlers = {};
         this.preventsubmit();
         this.eventHandler();
+    }
+
+    registerGlobalHandlers(newHandlers, context) {
+        this.context = context;
+        Object.assign(this.globalHandlers, newHandlers);
+    }
+
+    registerPageHandlers(newHandlers, context) {
+        this.context = context;
+        this.pageHandlers = newHandlers;
+    }
+
+    clearPageHandlers() {
+        this.pageHandlers = {};
     }
 
     preventsubmit() {
@@ -12,8 +31,8 @@ export class SharedEventHandler {
 
     eventHandler() {
         document.body.addEventListener("click", (e) => {
+            this.handlers = { ...this.pageHandlers, ...this.globalHandlers };
             let target = e.target;
-            console.log(target);
             while (
                 target != null &&
                 !Array.from(target.classList).some((r) => this.handlers.hasOwnProperty(r))

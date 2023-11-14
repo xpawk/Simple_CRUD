@@ -1,6 +1,5 @@
 import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
-import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
 import Loader from "../../components/Loader.js";
 import Modal from "../../components/Modal.js";
 
@@ -11,7 +10,6 @@ export default class LoginEvents {
             modal_control_bg: () => this.modal.closeModal(),
             login_form_submit: () => this.loginHandler(),
         };
-        new SharedEventHandler(this.handlers, this);
         return this.initialize();
     }
     async initialize() {

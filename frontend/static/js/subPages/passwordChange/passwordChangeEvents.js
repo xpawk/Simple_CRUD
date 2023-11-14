@@ -1,6 +1,5 @@
 import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
-import { SharedEventHandler } from "../../utils/SharedEventHandler.js";
 import { isPassSame } from "../../utils/isPassSame.js";
 import Loader from "../../components/Loader.js";
 import Modal from "../../components/Modal.js";
@@ -8,11 +7,9 @@ import Modal from "../../components/Modal.js";
 export default class PasswordChangeEvents {
     constructor() {
         this.handlers = {
-            modal_control_close: () => this.modal.closeModal(),
-            modal_control_bg: () => this.modal.closeModal(),
             passwordChange_button: () => this.changePassword(),
         };
-        new SharedEventHandler(this.handlers, this);
+
         return this.initialize();
     }
     async initialize() {

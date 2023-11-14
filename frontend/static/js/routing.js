@@ -8,9 +8,9 @@ import Register from "./subPages/register.js";
 import PasswordChange from "./subPages/passwordChange/passwordChange.js";
 import PasswordChangeEvents from "./subPages/passwordChange/passwordChangeEvents.js";
 import ErrorPage from "./subPages/errorPage.js";
-import Header from "./components/Header/Header.js";
+import Header from "./components/Header.js";
 import { ApiOperations } from "./apiOperations.js";
-import HeaderEvents from "./components/Header/HeaderEvents.js";
+import { SharedEventHandler } from "./utils/SharedEventHandler.js";
 
 const routes = [
     {
@@ -43,14 +43,15 @@ const routes = [
     },
 ];
 const redirectWhenLogged = ["/login", "/register"];
-
+let sharedEventHandler = null;
 const renderPage = async (route) => {
     const view = await new route.view();
-    const header = new Header(await ApiOperations.getUser());
-    new HeaderEvents();
-    document.querySelector("#app").innerHTML = header.getHtml() + `<main>${view.getHtml()}</main>`;
+    document.querySelector("main").innerHTML = view.getHtml();
     for (const Class of route.additionalClasses) {
-        new Class();
+        const instance = await new Class();
+        if (instance?.handlers) {
+            sharedEventHandler.registerPageHandlers(instance.handlers, instance);
+        }
     }
     history.pushState(null, "", route.path);
 };
@@ -94,7 +95,11 @@ const handleNavigation = (e) => {
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    const header = await new Header();
+    sharedEventHandler = new SharedEventHandler();
+    sharedEventHandler.registerGlobalHandlers(header.handlers, header);
+
     document.body.addEventListener("click", handleNavigation);
     window.addEventListener("popstate", () => router(window.location.pathname));
     router(window.location.pathname);
