@@ -8,6 +8,7 @@ import Register from "./subPages/register.js";
 import PasswordChange from "./subPages/passwordChange/passwordChange.js";
 import PasswordChangeEvents from "./subPages/passwordChange/passwordChangeEvents.js";
 import ErrorPage from "./subPages/errorPage.js";
+import AccountPage from "./subPages/account/accountPage.js";
 import Header from "./components/Header.js";
 import { ApiOperations } from "./apiOperations.js";
 import { SharedEventHandler } from "./utils/SharedEventHandler.js";
@@ -41,12 +42,19 @@ const routes = [
         additionalClasses: [PasswordChangeEvents],
         protected: true,
     },
+    {
+        view: AccountPage,
+        path: "/account",
+        additionalClasses: [],
+        protected: true,
+    },
 ];
 const redirectWhenLogged = ["/login", "/register"];
 let sharedEventHandler = null;
 const renderPage = async (route) => {
     const view = await new route.view();
     document.querySelector("main").innerHTML = view.getHtml();
+    sharedEventHandler.clearPageHandlers();
     for (const Class of route.additionalClasses) {
         const instance = await new Class();
         if (instance?.handlers) {
@@ -67,11 +75,14 @@ const findRouteByPath = (path) => routes.find((r) => r.path === path);
 const router = async (path = "/") => {
     try {
         let route = findRouteByPath(path);
-        const authorizationStatus = isUserAuthorized(await ApiOperations.userStatus(), route);
-
         if (!route) {
             route = findRouteByPath("/error-page");
-        } else if (redirectWhenLogged.includes(path) && authorizationStatus) {
+            await renderPage(route);
+            return;
+        }
+        const authorizationStatus = isUserAuthorized(await ApiOperations.userStatus(), route);
+
+        if (redirectWhenLogged.includes(path) && authorizationStatus) {
             route = findRouteByPath("/");
         } else if (route.protected && !authorizationStatus) {
             route = findRouteByPath("/login");
@@ -82,25 +93,12 @@ const router = async (path = "/") => {
         console.error("Error:", error);
     }
 };
-
-const handleNavigation = (e) => {
-    if (e.target.matches("a") && e.target.hasAttribute("route")) {
-        e.preventDefault();
-        if (e.target.classList.contains("go-back")) {
-            window.history.go(-2);
-        } else {
-            const path = e.target.getAttribute("href");
-            router(path);
-        }
-    }
-};
-
 document.addEventListener("DOMContentLoaded", async () => {
     const header = await new Header();
     sharedEventHandler = new SharedEventHandler();
     sharedEventHandler.registerGlobalHandlers(header.handlers, header);
-
-    document.body.addEventListener("click", handleNavigation);
     window.addEventListener("popstate", () => router(window.location.pathname));
     router(window.location.pathname);
 });
+
+export default router;

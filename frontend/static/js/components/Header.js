@@ -3,15 +3,22 @@ export default class Header {
     constructor() {
         this.handlers = {
             profile_btn: () => this.openDropDown(),
+            "outside&.profile_btn": () => this.closeDropDown(),
+            logout: () => this.logout(),
         };
         return this.initialize();
+    }
+
+    get dropDown() {
+        return document.querySelector(".user_box");
     }
 
     async initialize() {
         try {
             this.user = await ApiOperations.getUser();
             this.renderHeader();
-            this.dropDown = document.querySelector(".user_box");
+            // this.dropDown = document.querySelector(".user_box");
+
             return this;
         } catch (error) {
             console.error("Error:", error);
@@ -29,9 +36,19 @@ export default class Header {
             </div>
         `;
     }
+    logout() {
+        sessionStorage.clear();
+        window.location.replace("/");
+    }
+
+    closeDropDown() {
+        if (this.dropDown.classList.contains("active")) {
+            this.dropDown.classList.remove("active");
+        }
+    }
 
     openDropDown() {
-        this.dropDown.classList.add("active");
+        this.dropDown.classList.toggle("active");
     }
 
     userBox() {
@@ -42,6 +59,10 @@ export default class Header {
             <p>${this.user.username}</p>
             <i class="ri-arrow-down-s-line"></i>
             </div>
+            <div class="dropdown">
+            <a tabindex="3" href="/account" route class="dropdown_item"><i class="ri-user-line ri-lg"></i>Account Settings</a>
+            <button class="dropdown_item logout"><i class="ri-logout-box-line ri-lg"></i>Log Out</button>
+        </div>
         </div>
         `
             : `

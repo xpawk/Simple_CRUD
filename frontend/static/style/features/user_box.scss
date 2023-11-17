@@ -2,6 +2,7 @@
     margin-left: auto;
     display: flex;
     align-self: center;
+
     i {
         color: $whiteText;
         padding-right: 10px;
@@ -21,5 +22,48 @@
     }
     a:hover {
         color: $linkBlue;
+    }
+    position: relative;
+
+    button {
+        border: none;
+        padding: 0;
+        margin: 0;
+        background-color: unset;
+        cursor: pointer;
+        &:hover {
+            color: $linkBlue;
+        }
+    }
+    .dropdown {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background-color: $greyBlack;
+        border: 1px solid $greyLight;
+        border-radius: 10px;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        &_item {
+            text-align: left;
+            width: 100%;
+            color: $whiteText;
+            padding: 12px;
+            font-size: 14px;
+            text-decoration: none;
+            display: block;
+            &:hover {
+                background-color: $grey;
+            }
+            i {
+                color: $greyText;
+            }
+        }
+    }
+
+    &.active .dropdown {
+        display: block;
     }
 }

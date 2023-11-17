@@ -32,6 +32,7 @@
             justify-content: space-between;
             width: 100%;
             font-size: 14px;
+            font-weight: bold;
             padding-bottom: 10px;
             a {
                 text-decoration: none;
@@ -54,7 +55,7 @@
             overflow: hidden;
             color: $whiteText;
             text-indent: 10px;
-            background: $greyBlack;
+            background: black;
         }
         &_submit {
             @include button;
