@@ -1,19 +1,19 @@
 export default class Loader {
     constructor() {
-        document.querySelector('#app').innerHTML += `    
+        document.querySelector("main").innerHTML += `    
         <div class="loader">
         <div class="loader_content"></div>
         <div class="loader_bg"></div>
         </div>`;
-        this.loader = document.querySelector('.loader');
+        this.loader = document.querySelector(".loader");
     }
 
     show() {
-        this.loader.style.display = 'block';
+        this.loader.style.display = "block";
     }
 
     hide() {
-        this.loader.style.display = 'none';
+        this.loader.style.display = "none";
     }
 
     async withLoader(operation) {
