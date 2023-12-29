@@ -5,8 +5,8 @@ import LoginPage from "./subPages/login/loginPage.js";
 import LoginEvents from "./subPages/login/loginEvents.js";
 import PasswordReset from "./subPages/passwordReset.js";
 import Register from "./subPages/register.js";
-import PasswordChange from "./subPages/passwordChange/passwordChange.js";
-import PasswordChangeEvents from "./subPages/passwordChange/passwordChangeEvents.js";
+import PasswordChange from "./subPages/account/passwordChange/passwordChange.js";
+import PasswordChangeEvents from "./subPages/account/passwordChange/passwordChangeEvents.js";
 import ErrorPage from "./subPages/errorPage.js";
 import AccountPage from "./subPages/account/accountPage.js";
 import Header from "./components/Header.js";
@@ -28,8 +28,18 @@ const routes = [
         protected: false,
     },
     { view: Home, path: "/", additionalClasses: [], protected: false },
-    { view: LoginPage, path: "/login", additionalClasses: [LoginEvents], protected: false },
-    { view: PasswordReset, path: "/password-reset", additionalClasses: [], protected: false },
+    {
+        view: LoginPage,
+        path: "/login",
+        additionalClasses: [LoginEvents],
+        protected: false,
+    },
+    {
+        view: PasswordReset,
+        path: "/password-reset",
+        additionalClasses: [],
+        protected: false,
+    },
     {
         view: Register,
         path: "/register",
@@ -38,7 +48,7 @@ const routes = [
     },
     {
         view: PasswordChange,
-        path: "/password-change",
+        path: "/account/password-change",
         additionalClasses: [PasswordChangeEvents],
         protected: true,
     },
@@ -53,6 +63,7 @@ const redirectWhenLogged = ["/login", "/register"];
 let sharedEventHandler = null;
 const renderPage = async (route) => {
     const view = await new route.view();
+
     document.querySelector("main").innerHTML = view.getHtml();
     sharedEventHandler.clearPageHandlers();
     for (const Class of route.additionalClasses) {

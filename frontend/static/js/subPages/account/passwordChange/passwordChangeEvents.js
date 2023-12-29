@@ -1,8 +1,8 @@
-import { ApiOperations } from "../../apiOperations.js";
-import DomOperations from "../../utils/domOperations.js";
-import { isPassSame } from "../../utils/isPassSame.js";
-import Loader from "../../components/Loader.js";
-import Modal from "../../components/Modal.js";
+import { ApiOperations } from "../../../apiOperations.js";
+import DomOperations from "../../../utils/domOperations.js";
+import { isPassSame } from "../../../utils/isPassSame.js";
+import Loader from "../../../components/Loader.js";
+import Modal from "../../../components/Modal.js";
 
 export default class PasswordChangeEvents {
     constructor() {

@@ -2,18 +2,20 @@
     margin-left: auto;
     display: flex;
     align-self: center;
-
+    color: $whiteText;
     i {
-        color: $whiteText;
         padding-right: 10px;
     }
     .profile_btn {
         display: flex;
         cursor: pointer;
+
         p {
             padding: 0 5px 0 0;
             margin: 0;
-            color: $whiteText;
+        }
+        &:hover {
+            color: $green;
         }
     }
     span {
@@ -62,7 +64,9 @@
             }
         }
     }
-
+    &.active .profile_btn {
+        color: $green;
+    }
     &.active .dropdown {
         display: block;
     }

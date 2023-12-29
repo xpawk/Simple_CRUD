@@ -1,13 +1,13 @@
-import AdminPanel from './adminPanel/adminPanel.js';
+import AdminPanel from "./adminPanel/adminPanel.js";
 export default class Register {
     constructor() {
-        document.title = 'Register';
+        document.title = "Register";
     }
 
     getHtml() {
         return `
         <div class='content register'>
-        ${AdminPanel.formUsers('Sing up to Habit Tracker', 'Register')}
+        ${AdminPanel.formUsers("Sing up to WageWise", "Register")}
     </div>
     `;
     }

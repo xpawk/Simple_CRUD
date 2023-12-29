@@ -17,8 +17,6 @@ export default class Header {
         try {
             this.user = await ApiOperations.getUser();
             this.renderHeader();
-            // this.dropDown = document.querySelector(".user_box");
-
             return this;
         } catch (error) {
             console.error("Error:", error);
@@ -29,7 +27,7 @@ export default class Header {
         document.querySelector("header").innerHTML += `
             <div class="header_content">
                 <a tabindex="3" href="/" route>
-                    <img class="logo" src="./static/images/logo.png" />
+                    <img class="logo" src="../static/images/logo.png" />
                     <h1 class="title">WageWise</h1>
                 </a>
                 ${this.userBox()}
