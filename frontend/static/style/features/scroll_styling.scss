@@ -1,0 +1,23 @@
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $greyText $greyLight;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: $greyLight;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: $greyText;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    border-radius: 16px;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background-color: $greyLighter;
+}

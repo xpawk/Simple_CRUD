@@ -1,7 +1,6 @@
 import { ApiOperations } from "../../apiOperations.js";
 import DomOperations from "../../utils/domOperations.js";
 import { isPassSame } from "../../utils/isPassSame.js";
-import AdminPanel from "./adminPanel.js";
 import Loader from "../../components/Loader.js";
 import Modal from "../../components/Modal.js";
 
@@ -96,30 +95,6 @@ export default class AdminPanelEvents {
                     this.modal.createModal("Abort", response);
                 }
             });
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-
-    async changeEnv() {
-        try {
-            this.envSelect = document.getElementById("environment-select");
-            if (this.envSelect.value !== (await ApiOperations.checkEnv())) {
-                await this.loader.withLoader(async () => {
-                    const response = await ApiOperations.switchEnv(this.envSelect.value);
-                    if (response === "Success") {
-                        const panel = await new AdminPanel();
-                        const table = document.getElementById("users-list");
-                        table.innerHTML = await panel.tableUsers();
-                        this.users = await ApiOperations.getUsers();
-                        this.domOp.clearForm();
-                        this.domOp.updateTablebtn("add");
-                        this.modal.createModal(response, "Enviroment changed successfully");
-                    } else {
-                        this.modal.createModal("Abort", response);
-                    }
-                });
-            }
         } catch (error) {
             console.error("Error:", error);
         }

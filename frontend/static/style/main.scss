@@ -1,4 +1,5 @@
 @import "./mixins.scss";
+@import "features/scroll_styling.scss";
 @import "features/modal.scss";
 @import "features/loader.scss";
 @import "features/header.scss";
@@ -19,9 +20,11 @@
         outline: auto 1px $green;
     }
 }
+
 body {
-    background-color: #0d1117;
+    background-color: $greyBlack;
     overflow-x: hidden;
+    overflow-y: scroll;
     min-width: 100%;
     min-height: 100vh;
 }

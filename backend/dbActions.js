@@ -7,19 +7,6 @@ const jwt = require("jsonwebtoken");
 
 const dbActions = (app) => {
     let currentDB = connectDB();
-
-    //changing env
-    app.post("/env", authenticateToken, async ({ body: { env }, user }, res, next) => {
-        try {
-            if (isAdmin(user, res)) {
-                currentDB = await connectDB(env);
-                res.status(200).json("Success");
-            }
-        } catch (error) {
-            next(error);
-        }
-    });
-
     app.post(
         "/changePassword",
         authenticateToken,

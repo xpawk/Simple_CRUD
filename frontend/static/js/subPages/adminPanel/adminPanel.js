@@ -8,7 +8,6 @@ export default class AdminPanel {
     async dbData() {
         try {
             this.users = await ApiOperations.getUsers();
-            this.dbName = await ApiOperations.checkEnv();
         } catch (error) {
             console.error("Error:", error);
         }
@@ -84,22 +83,11 @@ export default class AdminPanel {
     </form>
     `;
     }
-    dbSelect() {
-        return `<div class='env'>
-  <select id="environment-select" name="environment">
-        <option value="prod" ${this.dbName === "prod" ? "selected" : " "}>Prod</option>
-        <option value="preprod" ${this.dbName === "preprod" ? "selected" : " "}>Preprod</option>
-  </select>
-  <button type='button' class="update_env_button">Change</button>
-  </div>
-    `;
-    }
 
     getHtml() {
         return `
     <div class='content'>
-    <h2 class='table_title'>Users Data</h2>
-${this.dbSelect()}  
+    <h2 class='table_title'>Users Data</h2> 
 ${this.tableUsers()}
 ${AdminPanel.formUsers()} 
   </div>
