@@ -17,7 +17,7 @@ export default class AccountPage {
     getHtml() {
         return `
         <div class='account-page'>
-   your account page 
+   <h3>Your account Profile</h3>
         </div>
    
     `;
