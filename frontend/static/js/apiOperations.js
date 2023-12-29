@@ -5,7 +5,6 @@ class ApiOperations {
                 method: "POST",
                 body: JSON.stringify(userData),
                 headers: {
-                    authorization: sessionStorage.token,
                     "content-type": "application/json",
                 },
             });
@@ -32,9 +31,6 @@ class ApiOperations {
         try {
             const response = await fetch(`/user/${id}`, {
                 method: "DELETE",
-                headers: {
-                    authorization: sessionStorage.token,
-                },
             });
             return response.json();
         } catch (error) {
@@ -48,7 +44,6 @@ class ApiOperations {
                 method: "PUT",
                 body: JSON.stringify(userData),
                 headers: {
-                    authorization: sessionStorage.token,
                     "content-type": "application/json",
                 },
             });
@@ -62,9 +57,6 @@ class ApiOperations {
         try {
             const response = await fetch("/usersTable", {
                 method: "GET",
-                headers: {
-                    authorization: sessionStorage.token,
-                },
             });
             return response.json();
         } catch (error) {
@@ -76,7 +68,6 @@ class ApiOperations {
             const response = await fetch("/getUser", {
                 method: "GET",
                 headers: {
-                    authorization: sessionStorage.token,
                     "Content-Type": "application/json",
                 },
             });
@@ -90,7 +81,6 @@ class ApiOperations {
             const response = await fetch("/env", {
                 method: "POST",
                 headers: {
-                    authorization: sessionStorage.token,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ env }),
@@ -105,7 +95,6 @@ class ApiOperations {
             const response = await fetch("/checkEnv", {
                 method: "GET",
                 headers: {
-                    authorization: sessionStorage.token,
                     "Content-Type": "application/json",
                 },
             });
@@ -119,7 +108,6 @@ class ApiOperations {
             const response = await fetch("/userStatus", {
                 method: "GET",
                 headers: {
-                    authorization: sessionStorage.token,
                     "Content-Type": "application/json",
                 },
             });
@@ -133,7 +121,6 @@ class ApiOperations {
             const response = await fetch("/changePassword", {
                 method: "POST",
                 headers: {
-                    authorization: sessionStorage.token,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(passwordInfo),
@@ -143,6 +130,18 @@ class ApiOperations {
             console.error("Error:", error);
         }
     }
+    static async logOut() {
+        try {
+            const response = await fetch(`/logout`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+            });
+            return response.json();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
 }
-
 export { ApiOperations };

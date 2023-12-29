@@ -35,7 +35,7 @@ const dbActions = (app) => {
                             $set: { password: hashedPassword },
                         },
                     );
-                    return res.json({
+                    return res.status(200).json({
                         status: "Success",
                         message: "Password changed successfully",
                     });
@@ -90,8 +90,14 @@ const dbActions = (app) => {
                         status: user.status,
                     },
                     process.env.JWT_SECRET,
+                    { expiresIn: "15m" },
                 );
-                res.json({ status: "Success", data: token });
+                res.cookie("auth_token", token, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "Strict",
+                });
+                res.status(200).json("Success");
             } else {
                 throw loginError;
             }
@@ -171,6 +177,10 @@ const dbActions = (app) => {
             res.status(500).json("Internal Server Error");
         }
     });
+    app.post("/logout", (req, res) => {
+        res.clearCookie("auth_token");
+        res.status(200).json("Success");
+    });
 };
 
 const validation = (body) => {
@@ -196,7 +206,7 @@ const isEmail = (login) => {
 };
 
 const authenticateToken = (req, res, next) => {
-    const token = req.headers["authorization"];
+    const token = req.cookies["auth_token"];
 
     if (!token) {
         return next({ message: "missingToken", status: 401 });

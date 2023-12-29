@@ -4,7 +4,7 @@ export default class Header {
         this.handlers = {
             profile_btn: () => this.openDropDown(),
             "outside&.profile_btn": () => this.closeDropDown(),
-            logout: () => this.logout(),
+            logout: async () => await this.logout(),
         };
         return this.initialize();
     }
@@ -34,9 +34,11 @@ export default class Header {
             </div>
         `;
     }
-    logout() {
-        sessionStorage.clear();
-        window.location.replace("/");
+    async logout() {
+        const response = await ApiOperations.logOut();
+        if (response === "Success") {
+            window.location.replace("/");
+        }
     }
 
     closeDropDown() {

@@ -30,8 +30,7 @@ export default class LoginEvents {
             );
             this.loader.withLoader(async () => {
                 const response = await ApiOperations.logIn(credentials);
-                if (response.status === "Success") {
-                    sessionStorage.setItem("token", response.data);
+                if (response === "Success") {
                     window.location.pathname = "";
                 } else {
                     this.modal.createModal("Abort", response);

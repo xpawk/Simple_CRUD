@@ -26,7 +26,6 @@ export default class PasswordChangeEvents {
         let passwordInfo = this.domOp.dataFromForm(
             document.querySelectorAll("#password-change input"),
         );
-        passwordInfo.token = sessionStorage.getItem("token");
         this.loader.withLoader(async () => {
             if (isPassSame(passwordInfo, this.modal)) {
                 const response = await ApiOperations.changePassword(passwordInfo);
