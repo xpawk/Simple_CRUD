@@ -33,13 +33,13 @@ export default class AccountPageEvents {
     async updateUser() {
         try {
             await this.loader.withLoader(async () => {
-                const response = await ApiOperations.editUser(
+                const response = await ApiOperations.editAccount(
                     this.dataFromUserFrom(),
                     this.currentId,
                 );
 
                 if (response === "Success") {
-                    this.modal.createModal(response, "User successfully edited");
+                    this.modal.createModal(response, "Account successfully edited");
                 } else {
                     this.modal.createModal("Abort", response);
                 }

@@ -13,7 +13,7 @@ const dbActions = (app) => {
         async ({ body: { current_password, password }, user }, res, next) => {
             try {
                 if (user && (await bcrypt.compare(current_password, user.password))) {
-                    validation(password, res);
+                    validation(password, true, false, res);
                     const _id = user._id;
                     const hashedPassword = await bcrypt.hash(password, 10);
                     await User.updateOne(
@@ -38,7 +38,7 @@ const dbActions = (app) => {
     //User register
     app.post("/user", async ({ body }, res, next) => {
         try {
-            validation(body, res);
+            validation(body, false, true, res);
             body.password = await bcrypt.hash(body.password, 10);
             await User.create(body);
             res.status(200).json("Success");
@@ -110,7 +110,7 @@ const dbActions = (app) => {
         async ({ body, params: { id = "" }, user }, res, next) => {
             try {
                 if (isAdmin(user, res)) {
-                    validation(body, res);
+                    validation(body, isAdmin(user), false, res);
                     await User.findByIdAndUpdate(id, body);
                     res.status(200).json("Success");
                 }
@@ -119,6 +119,16 @@ const dbActions = (app) => {
             }
         },
     );
+
+    app.put("/account", authenticateToken, async ({ body, user }, res, next) => {
+        try {
+            validation(body, isAdmin(user), false, res);
+            await User.findByIdAndUpdate(user._id, body);
+            res.status(200).json("Success");
+        } catch (error) {
+            next(error);
+        }
+    });
 
     app.get("/usersTable", authenticateToken, async (req, res, next) => {
         try {
@@ -170,7 +180,10 @@ const dbActions = (app) => {
     });
 };
 
-const validation = (body) => {
+const validation = (body, isAdmin, isRegistration = false) => {
+    const allowedFieldsForNonAdmin = ["name", "lName", "email", "username"];
+    const allowedFieldsForRegistration = ["name", "lName", "email", "username", "password"];
+    const allowedFields = isRegistration ? allowedFieldsForRegistration : allowedFieldsForNonAdmin;
     for (let key in body) {
         if (!body[key] || typeof body[key] !== "string") {
             throw { message: `Invalid ${key}`, status: 400 };
@@ -178,10 +191,15 @@ const validation = (body) => {
         if (body[key].length > 26) {
             throw { message: `Too long ${key}`, status: 400 };
         }
+        if (!isAdmin && !allowedFields.includes(key)) {
+            throw { message: `Unauthorized modification attempt`, status: 403 };
+        }
     }
+
     if (body.email && !isEmail(body.email)) {
         throw { message: "Enter correct e-mail", status: 400 };
     }
+
     if (body.password && body.password.length < 6) {
         throw { message: "Password should be at least 6 characters", status: 400 };
     }

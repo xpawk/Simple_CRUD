@@ -52,6 +52,20 @@ class ApiOperations {
             console.error("Error:", error);
         }
     }
+    static async editAccount(userData) {
+        try {
+            const response = await fetch(`/account`, {
+                method: "PUT",
+                body: JSON.stringify(userData),
+                headers: {
+                    "content-type": "application/json",
+                },
+            });
+            return response.json();
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
 
     static async getUsers() {
         try {
