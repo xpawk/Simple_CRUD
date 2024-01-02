@@ -110,7 +110,7 @@ const dbActions = (app) => {
         async ({ body, params: { id = "" }, user }, res, next) => {
             try {
                 if (isAdmin(user, res)) {
-                    validation(body, isAdmin(user), false, res);
+                    validation(body, true, false, res);
                     await User.findByIdAndUpdate(id, body);
                     res.status(200).json("Success");
                 }
@@ -122,7 +122,7 @@ const dbActions = (app) => {
 
     app.put("/account", authenticateToken, async ({ body, user }, res, next) => {
         try {
-            validation(body, isAdmin(user), false, res);
+            validation(body, user.status === "Admin", false, res);
             await User.findByIdAndUpdate(user._id, body);
             res.status(200).json("Success");
         } catch (error) {
