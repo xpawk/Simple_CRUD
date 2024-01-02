@@ -1,0 +1,52 @@
+.user_edit_form {
+    color: $whiteText;
+    width: 100%;
+    fieldset {
+        padding: 25px;
+        background-color: $greyBlack;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        column-gap: 150px;
+        border: solid 1px $greyLight;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    p {
+        margin: 0;
+    }
+    .pass_change {
+        width: 100%;
+        align-items: center;
+        display: flex;
+
+        a {
+            @include button;
+            background-color: $whiteText;
+            color: $greyBlack;
+            text-decoration: none;
+            margin-left: auto;
+        }
+    }
+    label {
+        font-weight: bold;
+
+        display: block;
+        padding-bottom: 10px;
+    }
+    input {
+        width: 100%;
+
+        height: 35px;
+        border: solid 1px $greyLight;
+        border-radius: 8px;
+        overflow: hidden;
+        color: $whiteText;
+        text-indent: 10px;
+        background: black;
+    }
+    button {
+        @include button;
+        grid-column: 2;
+    }
+}

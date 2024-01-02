@@ -6,6 +6,7 @@
 @import "features/user_form.scss";
 @import "features/user_table.scss";
 @import "features/user_box.scss";
+@import "features/user_edit_form.scss";
 @import "subPages/adminPanel.scss";
 @import "subPages/home.scss";
 @import "subPages/loginPage.scss";
@@ -38,7 +39,7 @@ body {
     width: 100%;
 }
 .content {
-    padding: 50px 20px 100px 20px;
+    padding: 20px 20px 100px 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: left;

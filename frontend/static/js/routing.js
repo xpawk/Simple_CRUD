@@ -12,6 +12,7 @@ import AccountPage from "./subPages/account/accountPage.js";
 import Header from "./components/Header.js";
 import { ApiOperations } from "./apiOperations.js";
 import { SharedEventHandler } from "./utils/SharedEventHandler.js";
+import AccountPageEvents from "./subPages/account/accountPageEvents.js";
 
 const routes = [
     {
@@ -55,7 +56,7 @@ const routes = [
     {
         view: AccountPage,
         path: "/account",
-        additionalClasses: [],
+        additionalClasses: [AccountPageEvents],
         protected: true,
     },
 ];

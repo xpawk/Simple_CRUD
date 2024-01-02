@@ -25,9 +25,4 @@ export default class Modal {
         document.body.style.overflow = "";
         this.modal.classList.remove("open");
     }
-    destroy() {
-        if (this.modal && this.modal.parentNode) {
-            this.modal.parentNode.removeChild(this.modal);
-        }
-    }
 }
