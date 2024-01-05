@@ -28,6 +28,11 @@
             margin-left: auto;
         }
     }
+    .account_status {
+        grid-column: 1;
+        display: flex;
+        justify-content: space-between;
+    }
     label {
         font-weight: bold;
 

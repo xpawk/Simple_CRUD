@@ -36,7 +36,9 @@ export default class AccountPage {
         <div class="pass_change">
         <label>Password</label><a href="/account/password-change" route>Change Password</a>
         </div>
-        <div><label>Your account status</label> <p>${this.user.status}</p></div>
+        <div class="account_status">
+        <label>Your account status</label> <p>${this.user.status}</p>
+        </div>
         <button class="save_user_button" data-id="${this.user._id}">Save changes</button>
       </fieldset>
     </form>
